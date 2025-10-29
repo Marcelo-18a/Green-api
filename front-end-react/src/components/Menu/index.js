@@ -7,7 +7,7 @@ import Link from "next/link";
 const Menu = () => {
   const [menuIcon, setMenuIcon] = useState(<FaBars />);
   const [isActive, setIsActive] = useState(false);
-
+//heloy
   const activeMenu = () => {
     setIsActive(!isActive);
     if (!isActive) {
