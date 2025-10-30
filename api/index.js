@@ -1,14 +1,18 @@
 import express from "express";
 import mongoose from "mongoose";
-import Games from "./models/Games.js"
-import User from "./models/Users.js"
+import Analysis from "./models/Analysis.js";
+import Heatmap from "./models/Heatmap.js";
+import Image from "./models/Image.js";
 // Importando o CORS
 import cors from "cors"
 
 const app = express();
 
 // Importando as rotas (endpoints) de Games
-import gameRoutes from './routes/gameRoutes.js'
+import analysisRoutes from './routes/analyses.js'
+import heatmapRoutes from './routes/heatmaps.js'
+import imageRoutes from "./routes/images.js"
+import userRoutes from "./routes/users.js"
 // Importando as rotas (endpoints) de Usuários
 import userRoutes from './routes/userRoutes.js'
 
@@ -19,11 +23,13 @@ app.use(express.json());
 // Configurando o CORS
 app.use(cors()) // Aberto
 
-app.use('/', gameRoutes)
+app.use('/', analysisRoutes )
+app.use('/', heatmapRoutes)
+app.use('/', imageRoutes)
 app.use('/', userRoutes)
 
 // Iniciando a conexão com o banco de dados do MongoDB
-mongoose.connect("mongodb://127.0.0.1:27017/thegames")
+mongoose.connect("mongodb://127.0.0.1:27017/GreenLeafDB")
 
 // Iniciando o servidor
 const port = 4000;
