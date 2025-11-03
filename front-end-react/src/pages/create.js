@@ -8,7 +8,7 @@ export default function Homepage() {
   return (
     <>
       <Head>
-        <title>The Games &copy; 2025</title>
+        <title>Green Leaf &copy; 2025</title>
         <meta
           name="description"
           content="Consumo em React de uma API de Games"

@@ -37,7 +37,7 @@ const Menu = () => {
             <Link href="/home">Home</Link>
           </li>
           <li>
-            <Link href="/create">Cadastrar jogos</Link>
+            <Link href="/create">Cadastrar folhas</Link>
           </li>
           <li>
             <a onClick={() => logout(router)} href="#">Logout</a>
