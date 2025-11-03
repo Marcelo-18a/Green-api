@@ -2,125 +2,145 @@ import { useState } from "react";
 import { useRouter } from "next/router";
 import styles from "@/components/CreateContent/CreateContent.module.css";
 import axios from "axios";
+import { axiosConfig } from "@/utils/auth";
 
 const CreateContent = () => {
-  // Criando os estados para as informações do jogo
-  const [title, setTitle] = useState("");
-  const [platform, setPlatform] = useState("");
-  const [genre, setGenre] = useState("");
-  const [rating, setRating] = useState("");
-  const [year, setYear] = useState("");
-  const [price, setPrice] = useState("");
-  // Carregando o router
+  // 🔹 Estados da amostra de folha
+  const [codigo_amostra, setCodigoAmostra] = useState("");
+  const [especie, setEspecie] = useState("Manihot esculenta");
+  const [variedade, setVariedade] = useState("");
+  const [data_coleta, setDataColeta] = useState("");
+  const [coletado_por, setColetadoPor] = useState("");
+  const [imagem_original, setImagemOriginal] = useState("");
+  const [latitude, setLatitude] = useState("");
+  const [longitude, setLongitude] = useState("");
+  const [municipio, setMunicipio] = useState("");
+  const [estado, setEstado] = useState("");
+
   const router = useRouter();
 
-  // Tratando a submissão do formulário
+  // 🔹 Submissão do formulário
   const handleSubmit = async (event) => {
     event.preventDefault();
 
-    // VALIDAÇÃO DO FORMULÁRIO (CAMPOS VAZIOS)
-    if (title && platform && genre && rating && year && price !== "") {
-      const game = {
-        title: title,
-        year: year,
-        price: price,
-        descriptions: {
-          platform: platform,
-          genre: genre,
-          rating: rating,
+    if (codigo_amostra && variedade && coletado_por && data_coleta) {
+      const sample = {
+        codigo_amostra,
+        especie,
+        variedade,
+        data_coleta,
+        coletado_por,
+        imagem_original,
+        localizacao: {
+          latitude: Number(latitude),
+          longitude: Number(longitude),
+          municipio,
+          estado,
         },
+        // 🔸 NÃO enviamos "analise" — o back gera aleatoriamente
       };
-      // FAZENDO POST NA API PARA CADASTRO
+
       try {
-        const response = await axios.post("http://localhost:4000/games", game);
+        const response = await axios.post(
+          "http://localhost:4000/leafsamples",
+          sample,
+          axiosConfig
+        );
         if (response.status === 201) {
-          alert("Game cadastrado com sucesso!");
+          alert("Amostra cadastrada com sucesso!");
           router.push("/home");
         }
       } catch (error) {
-        console.log(error);
+        console.error(error);
+        alert("Erro ao cadastrar amostra.");
       }
-      // console.log(game)
     } else {
-      alert("Por favor, preencha todos os campos.");
+      alert("Por favor, preencha todos os campos obrigatórios.");
     }
   };
 
   return (
     <div className={styles.createContent}>
       <div className="title">
-        <h2>Cadastrar novo jogo</h2>
+        <h2>Cadastrar nova amostra de folha</h2>
       </div>
+
       <form id="createForm" className="formPrimary" onSubmit={handleSubmit}>
         <input
           type="text"
-          name="title"
-          id="title"
-          placeholder="Insira o título do jogo"
+          placeholder="Código da amostra"
           className="inputPrimary"
-          onChange={(e) => setTitle(e.target.value)}
-          value={title}
+          onChange={(e) => setCodigoAmostra(e.target.value)}
+          value={codigo_amostra}
         />
         <input
           type="text"
-          name="platform"
-          id="platform"
-          placeholder="Insira a plataforma do jogo"
+          placeholder="Variedade da mandioca (ex: IAC 90)"
           className="inputPrimary"
-          onChange={(e) => setPlatform(e.target.value)}
-          value={platform}
+          onChange={(e) => setVariedade(e.target.value)}
+          value={variedade}
+        />
+        <input
+          type="date"
+          placeholder="Data da coleta"
+          className="inputPrimary"
+          onChange={(e) => setDataColeta(e.target.value)}
+          value={data_coleta}
         />
         <input
           type="text"
-          name="genre"
-          id="genre"
-          placeholder="Insira o gênero do jogo"
+          placeholder="Coletado por"
           className="inputPrimary"
-          onChange={(e) => setGenre(e.target.value)}
-          value={genre}
+          onChange={(e) => setColetadoPor(e.target.value)}
+          value={coletado_por}
         />
         <input
           type="text"
-          name="rating"
-          id="rating"
-          placeholder="Insira a classificação do jogo"
+          placeholder="URL da imagem original"
           className="inputPrimary"
-          onChange={(e) => setRating(e.target.value)}
-          value={rating}
+          onChange={(e) => setImagemOriginal(e.target.value)}
+          value={imagem_original}
+        />
+
+        <h3>📍 Localização</h3>
+        <input
+          type="number"
+          step="any"
+          placeholder="Latitude"
+          className="inputPrimary"
+          onChange={(e) => setLatitude(e.target.value)}
+          value={latitude}
         />
         <input
           type="number"
-          name="year"
-          id="year"
-          placeholder="Insira o ano do jogo"
+          step="any"
+          placeholder="Longitude"
           className="inputPrimary"
-          onChange={(e) => setYear(e.target.value)}
-          value={year}
+          onChange={(e) => setLongitude(e.target.value)}
+          value={longitude}
         />
         <input
-          type="number"
-          name="price"
-          id="price"
-          placeholder="Insira o preço do jogo"
+          type="text"
+          placeholder="Município"
           className="inputPrimary"
-          onChange={(e) => setPrice(e.target.value)}
-          value={price}
+          onChange={(e) => setMunicipio(e.target.value)}
+          value={municipio}
         />
+        <input
+          type="text"
+          placeholder="Estado"
+          className="inputPrimary"
+          onChange={(e) => setEstado(e.target.value)}
+          value={estado}
+        />
+
         <input
           type="submit"
-          value="Cadastrar"
+          value="Cadastrar Amostra"
           id="createBtn"
           className="btnPrimary"
         />
       </form>
-      {/* <div style={{color: "white"}}>
-        {title}<br />
-        {platform}<br />
-        {genre}<br />
-        {rating}<br />
-        {year}<br />
-        {price}<br />
-      </div> */}
     </div>
   );
 };

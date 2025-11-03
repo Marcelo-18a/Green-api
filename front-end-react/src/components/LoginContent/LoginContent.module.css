@@ -57,7 +57,6 @@
 
   .input {
     padding: 1rem;
-    margin-top: 0.5rem;
     margin-bottom: 0;
   }
   /* Fim do conteúdo Login */
@@ -85,10 +84,6 @@
 
   .loginContent .loginCard .loginCardHeader {
     margin-bottom: 1.5rem;
-  }
-
-  .input {
-    margin-top: 0.5rem;
   }
 
   /* Fim do conteúdo Login */

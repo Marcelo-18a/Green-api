@@ -1,132 +1,111 @@
 import { useState, useEffect } from "react";
 import styles from "@/components/EditContent/EditContent.module.css";
 import axios from "axios";
+import { axiosConfig } from "@/utils/auth";
 
-const EditContent = ({ onClose, game, handleUpdate }) => {
-  // Criando os estados para as informações do jogo
+const EditContent = ({ onClose, sample }) => {
+  // Estados para os campos da amostra
   const [id, setId] = useState("");
-  const [title, setTitle] = useState("");
-  const [platform, setPlatform] = useState("");
-  const [genre, setGenre] = useState("");
-  const [rating, setRating] = useState("");
-  const [year, setYear] = useState("");
-  const [price, setPrice] = useState("");
+  const [codigoAmostra, setCodigoAmostra] = useState("");
+  const [especie, setEspecie] = useState("");
+  const [variedade, setVariedade] = useState("");
+  const [dataColeta, setDataColeta] = useState("");
+  const [coletadoPor, setColetadoPor] = useState("");
+  const [localizacao, setLocalizacao] = useState({ municipio: "", estado: "" });
+  const [imagemOriginal, setImagemOriginal] = useState("");
+  const [grauInfeccao, setGrauInfeccao] = useState("");
+  const [bacteriaDetectada, setBacteriaDetectada] = useState("");
+  const [porcentagemArea, setPorcentagemArea] = useState("");
+  const [confiabilidadeModelo, setConfiabilidadeModelo] = useState("");
+  const [dataAnalise, setDataAnalise] = useState("");
 
-  // Efeito colateral
+  // Popula os estados quando a amostra é selecionada
   useEffect(() => {
-    if (game) {
-      setId(game._id);
-      setTitle(game.title);
-      setPlatform(game.descriptions.platform);
-      setGenre(game.descriptions.genre);
-      setRating(game.descriptions.rating);
-      setYear(game.year);
-      setPrice(game.price);
+    if (sample) {
+      setId(sample._id);
+      setCodigoAmostra(sample.codigo_amostra);
+      setEspecie(sample.especie);
+      setVariedade(sample.variedade);
+      setDataColeta(sample.data_coleta ? sample.data_coleta.split("T")[0] : "");
+      setColetadoPor(sample.coletado_por);
+      setLocalizacao({
+        municipio: sample.localizacao?.municipio || "",
+        estado: sample.localizacao?.estado || "",
+      });
+      setImagemOriginal(sample.imagem_original || "");
+      setGrauInfeccao(sample.analise?.grau_infeccao || "");
+      setBacteriaDetectada(sample.analise?.bacteria_detectada || "");
+      setPorcentagemArea(sample.analise?.porcentagem_area_afetada || "");
+      setConfiabilidadeModelo(sample.analise?.confiabilidade_modelo || "");
+      setDataAnalise(sample.analise?.data_analise ? sample.analise.data_analise.split("T")[0] : "");
     }
-  }, [game]); // Depência é o que faz o useEffect ser executado novamente
+  }, [sample]);
 
-  // Função para tratar submissão do formulário
+  // Submissão do formulário
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const updatedGame = {
-      title,
-      year,
-      price,
-      descriptions: {
-        platform,
-        genre,
-        rating,
+    const updatedSample = {
+      codigo_amostra: codigoAmostra,
+      especie,
+      variedade,
+      data_coleta: dataColeta,
+      coletado_por: coletadoPor,
+      imagem_original: imagemOriginal,
+      localizacao,
+      analise: {
+        grau_infeccao: grauInfeccao,
+        bacteria_detectada: bacteriaDetectada,
+        porcentagem_area_afetada: Number(porcentagemArea),
+        confiabilidade_modelo: Number(confiabilidadeModelo),
+        data_analise: dataAnalise,
       },
     };
-    // Enviando para API
+
     try {
       const response = await axios.put(
-        `http://localhost:4000/games/${id}`,
-        updatedGame
+        `http://localhost:4000/leafSamples/${id}`,
+        updatedSample,
+        axiosConfig
       );
       if (response.status === 200) {
-        alert("O jogo foi alterado com sucesso!");
-        handleUpdate(response.data.game); // Passa o jogo atualizado para o componente pai
+        alert("A amostra foi alterada com sucesso!");
+        onClose();
       }
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   };
 
   return (
-    <>
-      {/* CARD EDIÇÃO */}
-      <div className={styles.editModal} id={styles.editModal}>
-        <div className={styles.editContent}>
-          <span className={styles.modalClose} onClick={onClose}>
-            &times;
-          </span>
-          {/* TITLE */}
-          <div className="title">
-            <h2>Editar jogo</h2>
-          </div>
-          <form id="editForm" onSubmit={handleSubmit}>
-            <input type="hidden" name="id" value={id} />
-            <input
-              type="text"
-              name="title"
-              placeholder="Insira o novo título"
-              className="inputPrimary"
-              required
-              value={title}
-              onChange={(e) => setTitle(e.target.value)}
-            />
-            <input
-              type="text"
-              name="platform"
-              placeholder="Insira a nova plataforma do jogo"
-              className="inputPrimary"
-              required
-              value={platform}
-              onChange={(e) => setPlatform(e.target.value)}
-            />
-            <input
-              type="text"
-              name="genre"
-              placeholder="Insira o gênero do jogo"
-              className="inputPrimary"
-              required
-              value={genre}
-              onChange={(e) => setGenre(e.target.value)}
-            />
-            <input
-              type="text"
-              name="rating"
-              placeholder="Insira a classificação do jogo"
-              className="inputPrimary"
-              required
-              value={rating}
-              onChange={(e) => setRating(e.target.value)}
-            />
-            <input
-              type="number"
-              name="year"
-              placeholder="Insira o novo ano"
-              className="inputPrimary"
-              required
-              value={year}
-              onChange={(e) => setYear(e.target.value)}
-            />
-            <input
-              type="text"
-              name="price"
-              placeholder="Insira o novo preço"
-              className="inputPrimary"
-              required
-              value={price}
-              onChange={(e) => setPrice(e.target.value)}
-            />
-            <input type="submit" value="Alterar" className="btnPrimary" />
-          </form>
+    <div className={styles.editModal}>
+      <div className={styles.editContent}>
+        <span className={styles.modalClose} onClick={onClose}>
+          &times;
+        </span>
+        <div className="title">
+          <h2>Editar Amostra de Folha</h2>
         </div>
+        <form id="editForm" onSubmit={handleSubmit}>
+          <input type="text" placeholder="Código da Amostra" value={codigoAmostra} onChange={(e) => setCodigoAmostra(e.target.value)} required />
+          <input type="text" placeholder="Espécie" value={especie} onChange={(e) => setEspecie(e.target.value)} required />
+          <input type="text" placeholder="Variedade" value={variedade} onChange={(e) => setVariedade(e.target.value)} required />
+          <input type="date" placeholder="Data da Coleta" value={dataColeta} onChange={(e) => setDataColeta(e.target.value)} required />
+          <input type="text" placeholder="Coletado por" value={coletadoPor} onChange={(e) => setColetadoPor(e.target.value)} required />
+          <input type="text" placeholder="Município" value={localizacao.municipio} onChange={(e) => setLocalizacao({ ...localizacao, municipio: e.target.value })} required />
+          <input type="text" placeholder="Estado" value={localizacao.estado} onChange={(e) => setLocalizacao({ ...localizacao, estado: e.target.value })} required />
+          <input type="text" placeholder="URL da Imagem" value={imagemOriginal} onChange={(e) => setImagemOriginal(e.target.value)} />
+
+          <input type="text" placeholder="Nível de Infecção" value={grauInfeccao} onChange={(e) => setGrauInfeccao(e.target.value)} required />
+          <input type="text" placeholder="Bactéria Detectada" value={bacteriaDetectada} onChange={(e) => setBacteriaDetectada(e.target.value)} required />
+          <input type="number" placeholder="% Área Afetada" value={porcentagemArea} onChange={(e) => setPorcentagemArea(e.target.value)} required />
+          <input type="number" placeholder="% Confiabilidade Modelo" value={confiabilidadeModelo} onChange={(e) => setConfiabilidadeModelo(e.target.value)} required />
+          <input type="date" placeholder="Data da Análise" value={dataAnalise} onChange={(e) => setDataAnalise(e.target.value)} required />
+
+          <input type="submit" value="Alterar" className="btnPrimary" />
+        </form>
       </div>
-    </>
+    </div>
   );
 };
 

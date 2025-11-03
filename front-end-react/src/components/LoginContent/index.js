@@ -1,13 +1,22 @@
-import styles from "@/components/LoginContent/LoginContent.module.css";
+import { useState } from "react";
+import { login } from "@/utils/auth";
 import { useRouter } from "next/router";
+import styles from "@/components/LoginContent/LoginContent.module.css";
 
 const LoginContent = () => {
   const router = useRouter();
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
 
-  const handleLogin = (e) => {
+  const onSubmit = async (e) => {
     e.preventDefault();
-    // Futuramente aqui irá a validação, autenticação, etc.
-    router.push("/home");
+    const result = await login(email, password);
+    if (result.success) {
+      router.push("/home");
+    } else {
+      alert("Falha ao fazer o login. Tente novamente")
+    }
+
   };
 
   return (
@@ -28,11 +37,13 @@ const LoginContent = () => {
         </div>
         {/* LOGIN CARD BODY */}
         <div className={styles.loginCardBody}>
-          <form className="formPrimary" onSubmit={handleLogin}>
+          <form className="formPrimary" onSubmit={onSubmit}>
             <input
               type="email"
               name="email"
               id="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
               placeholder="Digite seu e-mail"
               className={`${styles.input} ${"inputPrimary"}`}
             />
@@ -40,12 +51,16 @@ const LoginContent = () => {
               type="password"
               name="password"
               id="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
               placeholder="Digite sua senha"
               className={`${styles.input} ${"inputPrimary"}`}
             />
-            <button type="submit" className={`${styles.input} ${"btnPrimary"}`}>
-              Entrar
-            </button>
+            <input
+              type="submit"
+              value="Entrar"
+              className={`${styles.input} ${"btnPrimary"}`}
+            />
           </form>
         </div>
       </div>
