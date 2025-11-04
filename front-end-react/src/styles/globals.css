@@ -13,10 +13,10 @@
 :root {
   --bg-color: #010101;
   --bg-alpha: #010101aa;
-  --primary-color: #2383f2;
+  --primary-color: #22C55E;
   --primary-alpha: #2383f249;
   --primary-hover: #0a54a9;
-  --secondary-color: #fff;
+  --secondary-color: #d6d6d6;
   --third-color: #060606;
   --fourth-color: #121212;
   --fourth-color-alpha: #12121280;
@@ -33,6 +33,12 @@
   color: var(--secondary-color);
   text-align: center;
   margin-bottom: 1.5rem;
+}
+
+.subtitle {
+  font-family: "Poppins";
+  color: var(--secondary-color);
+  text-align: center;
 }
 
 /* Início Form */

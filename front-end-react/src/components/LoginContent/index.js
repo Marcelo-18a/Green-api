@@ -22,13 +22,13 @@ const LoginContent = () => {
   return (
     <div className={styles.loginContent}>
       {/* LOGO */}
-      <div className={styles.logo}>
+      {/* <div className={styles.logo}>
         <img
           src="/images/thegames_logo.png"
           className={styles.logoImg}
           alt="The Games"
         />
-      </div>
+      </div> */}
       {/* LOGIN CARD */}
       <div className={styles.loginCard}>
         {/* LOGIN CARD HEADER */}

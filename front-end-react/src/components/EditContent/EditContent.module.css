@@ -16,7 +16,7 @@
   background-color: var(--fourth-color-alpha);
   backdrop-filter: blur(2px);
   -webkit-backdrop-filter: blur(2px);
-  border: solid 2px var(--primary-alpha);
+  border: solid 2px var(--secondary-color);
   border-radius: 0.5rem;
   margin: 5% auto;
   padding: 20px;

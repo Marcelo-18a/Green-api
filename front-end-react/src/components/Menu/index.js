@@ -24,7 +24,7 @@ const Menu = () => {
     <nav className={styles.navbar}>
       <div className={styles.logo}>
         <Link href="/home">
-          <img src="/images/thegames_symbol.png" alt="The Games" />
+          <img src="/images/logo-greenleaf2.png" alt="GreenLeaf Logo"/>
         </Link>
       </div>
       <div className={styles.menu}>

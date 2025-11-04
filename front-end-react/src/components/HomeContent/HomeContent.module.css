@@ -20,7 +20,7 @@
   background-color: var(--fourth-color-alpha);
   backdrop-filter: blur(2px);
   -webkit-backdrop-filter: blur(2px);
-  border: solid 1px var(--primary-alpha);
+  border: solid 1px var(--secondary-color);
   border-radius: 0.5rem;
 }
 

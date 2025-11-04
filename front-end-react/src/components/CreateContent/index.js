@@ -102,7 +102,9 @@ const CreateContent = () => {
           value={imagem_original}
         />
 
-        <h3>📍 Localização</h3>
+        <div className="subtitle">
+          <h2>📍 Localização</h2>
+        </div>
         <input
           type="number"
           step="any"

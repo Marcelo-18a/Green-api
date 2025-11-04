@@ -8,7 +8,7 @@
   -webkit-backdrop-filter: blur(2px);
   border-radius: 1rem;
   box-shadow: 0 8px 32px 0 var(--primary-alpha);
-  border: solid 1px var(--primary-color);
+  border: solid 1px var(--secondary-color);
 }
 /* Fim conteúdo Cadastro */
 
