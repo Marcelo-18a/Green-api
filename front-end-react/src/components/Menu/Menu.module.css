@@ -2,7 +2,7 @@
 .navbar {
   display: flex;
   position: fixed;
-  z-index: 10;
+  z-index: 1001; /* Aumentado de 10 para 1001 para ficar acima das estatísticas do mapa */
   align-items: center;
   justify-content: space-between;
   width: 100%;
@@ -32,7 +32,7 @@
 }
 
 .navbar .menu .menuItems a {
-  color: var(--label-color);
+  color: white;
 }
 
 .navbar .menu .menuItems a:hover {
@@ -41,7 +41,7 @@
 
 .menuBtn {
   display: none;
-  color: var(--label-color);
+  color: white;
   font-size: 2rem;
   cursor: pointer;
   margin-right: 1.5rem;

@@ -1,0 +1,201 @@
+/* Estilos para a página do mapa */
+.mapPageContent {
+  padding: 100px 0 20px 0; /* Adicionado padding-top para compensar o navbar fixo */
+  min-height: 70vh;
+  max-width: 95%; /* Usar 95% da largura disponível */
+  width: 100%;
+  margin: 0 auto;
+}
+
+.header {
+  text-align: center;
+  margin-bottom: 30px;
+  padding: 0 20px;
+}
+
+.header h1 {
+  color: white;
+  font-size: 2.5rem;
+  margin-bottom: 15px;
+  font-weight: 600;
+}
+
+.header p {
+  color: white;
+  font-size: 1.1rem;
+  max-width: 800px;
+  margin: 0 auto 20px auto;
+  line-height: 1.6;
+}
+
+.refreshButton {
+  background-color: #28a745;
+  color: white;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 6px;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 4px rgba(40, 167, 69, 0.2);
+}
+
+.refreshButton:hover:not(:disabled) {
+  background-color: #218838;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(40, 167, 69, 0.3);
+}
+
+.refreshButton:disabled {
+  background-color: #6c757d;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.errorMessage {
+  background-color: #f8d7da;
+  border: 1px solid #f5c6cb;
+  color: #721c24;
+  padding: 20px;
+  border-radius: 8px;
+  margin: 20px;
+  text-align: center;
+}
+
+.errorMessage p {
+  margin: 0 0 15px 0;
+  font-weight: 500;
+}
+
+.errorMessage button {
+  background-color: #dc3545;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.9rem;
+}
+
+.errorMessage button:hover {
+  background-color: #c82333;
+}
+
+.mapSection {
+  margin: 20px 0;
+  padding: 0 10px; /* Reduzido padding lateral para dar mais espaço ao mapa */
+}
+
+.loadingContainer {
+  text-align: center;
+  padding: 60px 20px;
+  color: #6c757d;
+}
+
+.loadingContainer p {
+  margin-top: 20px;
+  font-size: 1.1rem;
+}
+
+.mapInfo {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  margin-bottom: 30px;
+  padding: 0 10px; /* Reduzido de 20px para 10px */
+}
+
+.infoCard {
+  background-color: #f8f9fa;
+  border: 1px solid #dee2e6;
+  border-radius: 8px;
+  padding: 20px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.infoCard h3 {
+  color: #28a745;
+  font-size: 1.2rem;
+  margin: 0 0 15px 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.infoCard ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.infoCard li {
+  padding: 6px 0;
+  color: #495057;
+  font-size: 0.95rem;
+  border-bottom: 1px solid #e9ecef;
+}
+
+.infoCard li:last-child {
+  border-bottom: none;
+}
+
+.infoCard strong {
+  color: #333;
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+  .mapPageContent {
+    padding: 80px 0 15px 0; /* Ajuste para mobile */
+    max-width: 98%; /* Usar mais largura em mobile */
+  }
+
+  .header h1 {
+    font-size: 2rem;
+  }
+
+  .header p {
+    font-size: 1rem;
+    padding: 0 10px;
+  }
+
+  .mapInfo {
+    grid-template-columns: 1fr;
+    gap: 15px;
+    padding: 0 5px; /* Ainda menos padding em mobile */
+  }
+
+  .infoCard {
+    padding: 15px;
+  }
+
+  .infoCard h3 {
+    font-size: 1.1rem;
+  }
+
+  .infoCard li {
+    font-size: 0.9rem;
+    padding: 8px 0;
+  }
+}
+
+@media (max-width: 480px) {
+  .header {
+    padding: 0 10px;
+  }
+
+  .header h1 {
+    font-size: 1.8rem;
+  }
+
+  .refreshButton {
+    padding: 10px 20px;
+    font-size: 0.9rem;
+  }
+
+  .mapInfo {
+    padding: 0;
+    margin: 0 10px 20px 10px;
+  }
+}

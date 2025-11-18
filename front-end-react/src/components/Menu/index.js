@@ -4,12 +4,12 @@ import { IoClose } from "react-icons/io5";
 import styles from "@/components/Menu/Menu.module.css";
 import Link from "next/link";
 import { logout } from "@/utils/auth";
-import { useRouter } from "next/router"
+import { useRouter } from "next/router";
 
 const Menu = () => {
   const [menuIcon, setMenuIcon] = useState(<FaBars />);
   const [isActive, setIsActive] = useState(false);
-  const router = useRouter()
+  const router = useRouter();
 
   const activeMenu = () => {
     setIsActive(!isActive);
@@ -24,7 +24,7 @@ const Menu = () => {
     <nav className={styles.navbar}>
       <div className={styles.logo}>
         <Link href="/home">
-          <img src="/images/logo-greenleaf2.png" alt="GreenLeaf Logo"/>
+          <img src="/images/logo-greenleaf2.png" alt="GreenLeaf Logo" />
         </Link>
       </div>
       <div className={styles.menu}>
@@ -37,10 +37,15 @@ const Menu = () => {
             <Link href="/home">Home</Link>
           </li>
           <li>
+            <Link href="/map">Mapa</Link>
+          </li>
+          <li>
             <Link href="/create">Cadastrar folhas</Link>
           </li>
           <li>
-            <a onClick={() => logout(router)} href="#">Logout</a>
+            <a onClick={() => logout(router)} href="#">
+              Logout
+            </a>
           </li>
         </ul>
       </div>

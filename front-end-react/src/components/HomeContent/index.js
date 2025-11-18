@@ -3,6 +3,8 @@ import axios from "axios";
 import styles from "@/components/HomeContent/HomeContent.module.css";
 import Loading from "../Loading";
 import EditContent from "../EditContent";
+import Map from "../Map";
+import Link from "next/link";
 import { axiosConfig } from "@/utils/auth";
 
 const HomeContent = () => {
@@ -13,7 +15,10 @@ const HomeContent = () => {
   useEffect(() => {
     const fetchSamples = async () => {
       try {
-        const response = await axios.get("http://localhost:4000/leafSamples", axiosConfig);
+        const response = await axios.get(
+          "http://localhost:4000/leafsamples",
+          axiosConfig
+        );
         setSamples(response.data.samples);
       } catch (error) {
         console.error(error);
@@ -28,7 +33,7 @@ const HomeContent = () => {
   const deleteSample = async (sampleId) => {
     try {
       const response = await axios.delete(
-        `http://localhost:4000/leafSamples/${sampleId}`,
+        `http://localhost:4000/leafsamples/${sampleId}`,
         axiosConfig
       );
       if (response.status === 204) {
@@ -52,6 +57,19 @@ const HomeContent = () => {
 
   return (
     <div className={styles.homeContent}>
+      {/* CARD MAPA RESUMO */}
+      <div className={styles.mapSummaryCard}>
+        <div className={styles.title}>
+          <h2>Mapa de Distribuição das Amostras</h2>
+          <Link href="/map" className={styles.viewFullMapLink}>
+            Ver mapa completo →
+          </Link>
+        </div>
+        <div className={styles.mapPreview}>
+          <Map samples={samples.slice(0, 20)} /> {/* Limite para performance */}
+        </div>
+      </div>
+
       {/* CARD LISTA DE AMOSTRAS */}
       <div className={styles.listSamplesCard}>
         {/* TITLE */}
@@ -73,13 +91,31 @@ const HomeContent = () => {
                 <h3>{sample.codigo_amostra}</h3>
                 <li>Espécie: {sample.especie}</li>
                 <li>Variedade: {sample.variedade}</li>
-                <li>Local: {sample.localizacao?.municipio}, {sample.localizacao?.estado}</li>
-                <li>Data da coleta: {new Date(sample.data_coleta).toLocaleDateString("pt-BR")}</li>
+                <li>
+                  Local: {sample.localizacao?.municipio},{" "}
+                  {sample.localizacao?.estado}
+                </li>
+                <li>
+                  Data da coleta:{" "}
+                  {new Date(sample.data_coleta).toLocaleDateString("pt-BR")}
+                </li>
                 <li>Nível de infecção: {sample.analise?.grau_infeccao}</li>
-                <li>Bactéria detectada: {sample.analise?.bacteria_detectada}</li>
-                <li>Área afetada: {sample.analise?.porcentagem_area_afetada}%</li>
-                <li>Confiabilidade do modelo: {sample.analise?.confiabilidade_modelo}%</li>
-                <li>Data da análise: {new Date(sample.analise?.data_analise).toLocaleDateString("pt-BR")}</li>
+                <li>
+                  Bactéria detectada: {sample.analise?.bacteria_detectada}
+                </li>
+                <li>
+                  Área afetada: {sample.analise?.porcentagem_area_afetada}%
+                </li>
+                <li>
+                  Confiabilidade do modelo:{" "}
+                  {sample.analise?.confiabilidade_modelo}%
+                </li>
+                <li>
+                  Data da análise:{" "}
+                  {new Date(sample.analise?.data_analise).toLocaleDateString(
+                    "pt-BR"
+                  )}
+                </li>
 
                 {/* Botão de deletar */}
                 <button
