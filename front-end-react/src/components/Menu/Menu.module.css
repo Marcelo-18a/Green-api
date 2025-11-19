@@ -10,9 +10,9 @@
 }
 
 .navbar .logo img {
-  padding: 0.5rem;
+  padding: 0.3rem; /* Reduzido de 0.5rem para 0.3rem */
   margin-left: 1rem;
-  width: 3.5rem;
+  width: 2.8rem; /* Reduzido de 3.5rem para 2.8rem */
 }
 
 .navbar .logo img:hover {
@@ -28,7 +28,7 @@
 }
 
 .navbar .menu .menuItems li {
-  padding: 1.2rem;
+  padding: 0.8rem; /* Reduzido de 1.2rem para 0.8rem */
 }
 
 .navbar .menu .menuItems a {
@@ -52,9 +52,9 @@
 @media (max-width: 768px) {
   /* Início Navbar */
   .navbar .logo img {
-    padding: 0.5rem;
+    padding: 0.3rem; /* Mantém consistente com desktop */
     margin-left: 0.1rem;
-    width: 3.5rem;
+    width: 2.8rem; /* Mantém consistente com desktop */
   }
 
   .navbar .menuItems {
@@ -67,7 +67,7 @@
     left: -100%;
     top: 0;
     text-align: center;
-    padding-top: 80px;
+    padding-top: 60px; /* Reduzido de 80px para 60px */
     transition: all 0.3s ease;
   }
 
@@ -76,6 +76,22 @@
     font-size: 1.2rem;
     margin-bottom: 1rem;
     border-bottom: 2px outset var(--label-color);
+  }
+
+  .dashboardItem {
+    background: linear-gradient(45deg, rgba(34, 197, 94, 0.15), rgba(22, 160, 133, 0.15));
+    border-radius: 8px;
+    margin-bottom: 1.5rem !important;
+    border-bottom: 2px solid var(--primary-color) !important;
+  }
+
+  .dashboardItem a {
+    font-size: 1.3rem;
+    justify-content: center;
+  }
+
+  .dashboardIcon {
+    font-size: 1.5rem;
   }
 
   .menuBtn {
@@ -90,3 +106,30 @@
 }
 
 /* FIM RESPONSIVIDADE */
+
+/* Dashboard Menu Item Styles */
+.dashboardItem {
+  background: linear-gradient(45deg, rgba(34, 197, 94, 0.1), rgba(22, 160, 133, 0.1));
+  border-radius: 8px;
+  margin: 0 0.5rem;
+  transition: all 0.3s ease;
+}
+
+.dashboardItem:hover {
+  background: linear-gradient(45deg, rgba(34, 197, 94, 0.2), rgba(22, 160, 133, 0.2));
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(34, 197, 94, 0.3);
+}
+
+.dashboardItem a {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-weight: 600;
+  color: var(--primary-color) !important;
+}
+
+.dashboardIcon {
+  font-size: 1.2rem;
+  filter: drop-shadow(0 0 5px rgba(34, 197, 94, 0.5));
+}

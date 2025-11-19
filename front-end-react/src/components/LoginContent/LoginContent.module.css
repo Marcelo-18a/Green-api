@@ -3,18 +3,21 @@
   display: flex;
   flex-direction: column;
   width: 100%;
-  height: 100vh;
+  min-height: 100vh;
   align-items: center;
   justify-content: center;
-  gap: 3rem;
+  gap: 2rem;
+  padding: 2rem;
+  overflow: hidden;
 }
 
 .loginContent .logo {
-  margin-top: -5%;
+  margin-top: 0;
 }
 
 .loginContent .logo .logoImg {
   max-width: 25rem;
+  height: auto;
 }
 
 .loginContent .loginCard {
@@ -23,8 +26,10 @@
   align-items: center;
   justify-content: center;
   width: 28rem;
-  height: 22rem;
-  margin-right: 3rem;
+  max-width: 90vw;
+  height: auto;
+  min-height: 22rem;
+  padding: 2rem;
   backdrop-filter: blur(2px);
   -webkit-backdrop-filter: blur(2px);
   border-radius: 1rem;
@@ -35,63 +40,112 @@
 }
 
 .loginContent .loginCard .loginCardHeader {
-  font-size: 0.8rem;
-  margin-bottom: 1rem;
+  font-size: 1rem;
+  margin-bottom: 1.5rem;
+  text-align: center;
+}
+
+.loginContent .loginCard .loginCardHeader h3 {
+  margin: 0;
+  font-weight: 600;
 }
 
 .loginContent .loginCard .loginCardBody {
-  width: 70%;
+  width: 80%;
+  max-width: 300px;
+}
+
+.input {
+  width: 100%;
+  padding: 1rem;
+  margin-bottom: 1rem;
+  border: 1px solid var(--primary-color);
+  background-color: var(--fourth-color);
+  color: var(--secondary-color);
+  border-radius: 8px;
+  font-family: "Poppins";
+  font-size: 0.9rem;
+  transition: all 0.3s ease;
+}
+
+.input:focus {
+  outline: none;
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 2px rgba(34, 197, 94, 0.2);
 }
 /* Fim conteúdo Login */
 
 /* RESPONSIVIDADE */
 @media (max-width: 1200px) { 
   .loginContent {
-    flex-direction: column; 
-    justify-content: center;
+    gap: 1.5rem;
+    padding: 1.5rem;
   }
-  /* Início do conteúdo Login */
+  
   .loginContent .loginCard {
-    width: 22rem;
-    height: 15rem;
-    margin: 0;
+    width: 26rem;
+    max-width: 90vw;
+    padding: 1.5rem;
   }
 
   .loginContent .loginCard .loginCardHeader {
-    margin-bottom: 0.1rem;
+    font-size: 0.9rem;
+    margin-bottom: 1rem;
+  }
+
+  .input {
+    padding: 0.9rem;
+    margin-bottom: 0.8rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .loginContent {
+    gap: 1rem;
+    padding: 1rem;
+    min-height: 100vh;
+  }
+
+  .loginContent .logo .logoImg {
+    max-width: 18rem;
+  }
+
+  .loginContent .loginCard {
+    width: 22rem;
+    max-width: 95vw;
+    padding: 1.5rem;
+    min-height: auto;
+  }
+
+  .loginContent .loginCard .loginCardHeader {
+    font-size: 1rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .loginContent .loginCard .loginCardBody {
+    width: 90%;
   }
 
   .input {
     padding: 1rem;
-    margin-bottom: 0;
+    margin-bottom: 1rem;
+    font-size: 1rem;
   }
-  /* Fim do conteúdo Login */
 }
 
-@media (max-width: 768px) {
-  /* Início do conteúdo Login */
+@media (max-width: 480px) {
   .loginContent {
-    flex-direction: column;
-    justify-content: center;
-    margin-bottom: 0;
-  }
-
-  .loginContent .logo .logoImg {
-    max-width: 20rem;
-    margin-bottom: 4rem;
-    margin-top: -5rem;
+    padding: 0.5rem;
   }
 
   .loginContent .loginCard {
-    width: 20rem;
-    height: 20rem;
-    margin: 0;
+    width: 100%;
+    max-width: 95vw;
+    padding: 1rem;
   }
 
-  .loginContent .loginCard .loginCardHeader {
-    margin-bottom: 1.5rem;
+  .loginContent .loginCard .loginCardBody {
+    width: 95%;
   }
-
-  /* Fim do conteúdo Login */
 }
 /* FIM RESPONSIVIDADE */

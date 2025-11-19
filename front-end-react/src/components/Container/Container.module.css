@@ -2,15 +2,37 @@
   background-image: url("/images/bg.png");
   background-size: cover;
   background-attachment: fixed;
+  background-position: center;
+  background-repeat: no-repeat;
+  width: 100vw;
+  min-height: 100vh;
+  overflow-x: hidden;
 }
 
 .container {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start; /* Mudado de center para flex-start */
   background-color: var(--bg-alpha);
   min-height: 100vh;
+  width: 100%;
+  padding: 0;
+  margin: 0;
+  padding-top: 3rem; /* Reduzido de 4rem para 3rem */
+}
+
+/* Login Container - mantém centralização vertical */
+.loginContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center; /* Mantém center para login */
+  background-color: var(--bg-alpha);
+  min-height: 100vh;
+  width: 100%;
+  padding: 0;
+  margin: 0;
 }
 
 /* RESPONSIVIDADE */

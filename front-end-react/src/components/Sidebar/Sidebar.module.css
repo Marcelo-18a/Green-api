@@ -1,0 +1,248 @@
+/* Sidebar Styles */
+.sidebar {
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 280px;
+  height: 100vh;
+  background: linear-gradient(180deg, var(--fourth-color) 0%, var(--third-color) 100%);
+  border-right: 1px solid rgba(34, 197, 94, 0.1);
+  padding: 2rem 0;
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 2px 0 15px rgba(0, 0, 0, 0.3);
+}
+
+/* Logo Section */
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 0 2rem;
+  margin-bottom: 3rem;
+  border-bottom: 1px solid rgba(34, 197, 94, 0.2);
+  padding-bottom: 2rem;
+}
+
+.logo img {
+  width: 3rem;
+  height: 3rem;
+}
+
+.logo h3 {
+  color: var(--primary-color);
+  font-family: "Poppins", sans-serif;
+  font-weight: 600;
+  font-size: 1.3rem;
+  margin: 0;
+}
+
+/* Navigation */
+.nav {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.menuList {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.menuItem {
+  margin: 0;
+  padding: 0;
+}
+
+.menuLink {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem 2rem;
+  color: var(--secondary-color);
+  text-decoration: none;
+  font-family: "Poppins", sans-serif;
+  transition: all 0.3s ease;
+  border-left: 3px solid transparent;
+  position: relative;
+  overflow: hidden;
+}
+
+.menuLink::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 0;
+  height: 100%;
+  background: rgba(34, 197, 94, 0.1);
+  transition: width 0.3s ease;
+  z-index: -1;
+}
+
+.menuLink:hover::before {
+  width: 100%;
+}
+
+.menuLink:hover {
+  color: var(--primary-color);
+  border-left-color: var(--primary-color);
+  transform: translateX(5px);
+}
+
+.menuLink.active {
+  background: rgba(34, 197, 94, 0.15);
+  border-left-color: var(--primary-color);
+  color: var(--primary-color);
+}
+
+.menuLink.active .icon {
+  transform: scale(1.1);
+  filter: drop-shadow(0 0 8px rgba(34, 197, 94, 0.6));
+}
+
+.icon {
+  font-size: 1.5rem;
+  width: 2rem;
+  height: 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+}
+
+.textContent {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.label {
+  font-weight: 600;
+  font-size: 0.95rem;
+  line-height: 1.2;
+}
+
+.description {
+  font-size: 0.75rem;
+  color: var(--label-color);
+  font-weight: 400;
+  line-height: 1;
+}
+
+.menuLink:hover .description {
+  color: rgba(34, 197, 94, 0.7);
+}
+
+.menuLink.active .description {
+  color: rgba(34, 197, 94, 0.8);
+}
+
+/* Logout Section */
+.logoutSection {
+  margin-top: auto;
+  padding: 2rem;
+  border-top: 1px solid rgba(34, 197, 94, 0.2);
+}
+
+.logoutBtn {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  width: 100%;
+  padding: 1rem;
+  background: transparent;
+  border: 1px solid rgba(239, 68, 68, 0.3);
+  border-radius: 8px;
+  color: #ef4444;
+  font-family: "Poppins", sans-serif;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.logoutBtn:hover {
+  background: rgba(239, 68, 68, 0.1);
+  border-color: #ef4444;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(239, 68, 68, 0.2);
+}
+
+.logoutBtn .icon {
+  color: #ef4444;
+}
+
+.logoutBtn .label {
+  color: #ef4444;
+}
+
+.logoutBtn .description {
+  color: rgba(239, 68, 68, 0.7);
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+  .sidebar {
+    width: 260px;
+  }
+  
+  .logo {
+    padding: 0 1.5rem;
+  }
+  
+  .menuLink {
+    padding: 0.8rem 1.5rem;
+  }
+  
+  .logoutSection {
+    padding: 1.5rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .sidebar {
+    transform: translateX(-100%);
+    transition: transform 0.3s ease;
+    width: 280px;
+    z-index: 1001;
+  }
+  
+  .sidebar.open {
+    transform: translateX(0);
+  }
+  
+  /* Overlay for mobile */
+  .sidebar::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: -1;
+    opacity: 0;
+    transition: all 0.3s ease;
+    pointer-events: none;
+  }
+  
+  .sidebar.open::before {
+    opacity: 1;
+    pointer-events: all;
+  }
+}
+
+@media (max-width: 480px) {
+  .sidebar {
+    width: 100vw;
+  }
+  
+  .sidebar.open {
+    transform: translateX(0);
+  }
+}

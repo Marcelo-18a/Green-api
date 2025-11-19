@@ -136,7 +136,6 @@ const MapComponent = ({ center, samples, heatmapData, userLocation }) => {
           <div class="${styles.popupContent}">
             <h4>${sample.codigo_amostra}</h4>
             <p><strong>Espécie:</strong> ${sample.especie}</p>
-            <p><strong>Variedade:</strong> ${sample.variedade || "N/A"}</p>
             <p><strong>Local:</strong> ${sample.localizacao.municipio}, ${
           sample.localizacao.estado
         }</p>

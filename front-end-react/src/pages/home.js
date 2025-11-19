@@ -1,7 +1,5 @@
 import Head from "next/head";
-import Container from "@/components/Container";
-import Menu from "@/components/Menu";
-import Footer from "@/components/Footer";
+import Layout from "@/components/Layout";
 import HomeContent from "@/components/HomeContent";
 
 export default function Homepage() {
@@ -11,18 +9,14 @@ export default function Homepage() {
         <title>Green Leaf &copy; 2025</title>
         <meta
           name="description"
-          content="Consumo em React de uma API de Games"
+          content="Sistema de Análise de Folhas - Green Leaf"
         />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <main>
-        <Menu />
-        <Container>
-          <HomeContent />
-        </Container>
-      </main>
-      <Footer />
+      <Layout>
+        <HomeContent />
+      </Layout>
     </>
   );
 }

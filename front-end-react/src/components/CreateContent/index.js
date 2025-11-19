@@ -3,12 +3,12 @@ import { useRouter } from "next/router";
 import styles from "@/components/CreateContent/CreateContent.module.css";
 import axios from "axios";
 import { axiosConfig } from "@/utils/auth";
+import { useNotification } from "../Notification/NotificationContext";
 
 const CreateContent = () => {
   // 🔹 Estados da amostra de folha
   const [codigo_amostra, setCodigoAmostra] = useState("");
   const [especie, setEspecie] = useState("Manihot esculenta");
-  const [variedade, setVariedade] = useState("");
   const [data_coleta, setDataColeta] = useState("");
   const [coletado_por, setColetadoPor] = useState("");
   const [imagem_original, setImagemOriginal] = useState("");
@@ -23,6 +23,7 @@ const CreateContent = () => {
   const [manualLocation, setManualLocation] = useState(false);
 
   const router = useRouter();
+  const { showSuccess, showError, showWarning } = useNotification();
 
   // 🔹 Obter localização automática ao carregar o componente
   useEffect(() => {
@@ -116,14 +117,14 @@ const CreateContent = () => {
     event.preventDefault();
 
     // Validação dos campos obrigatórios
-    if (!codigo_amostra || !variedade || !coletado_por || !data_coleta) {
-      alert("Por favor, preencha todos os campos obrigatórios.");
+    if (!codigo_amostra || !coletado_por || !data_coleta) {
+      showWarning("Por favor, preencha todos os campos obrigatórios.");
       return;
     }
 
     // Validação da localização
     if (!latitude || !longitude) {
-      alert(
+      showWarning(
         "Por favor, aguarde a obtenção da localização ou insira manualmente."
       );
       return;
@@ -132,7 +133,6 @@ const CreateContent = () => {
     const sample = {
       codigo_amostra,
       especie,
-      variedade,
       data_coleta,
       coletado_por,
       imagem_original,
@@ -152,12 +152,12 @@ const CreateContent = () => {
         axiosConfig
       );
       if (response.status === 201) {
-        alert("Amostra cadastrada com sucesso!");
+        showSuccess("Amostra cadastrada com sucesso!");
         router.push("/home");
       }
     } catch (error) {
       console.error(error);
-      alert("Erro ao cadastrar amostra.");
+      showError("Erro ao cadastrar amostra. Tente novamente.");
     }
   };
 
@@ -167,45 +167,63 @@ const CreateContent = () => {
         <h2>Cadastrar nova amostra de folha</h2>
       </div>
 
-      <form id="createForm" className="formPrimary" onSubmit={handleSubmit}>
-        <input
-          type="text"
-          placeholder="Código da amostra"
-          className="inputPrimary"
-          onChange={(e) => setCodigoAmostra(e.target.value)}
-          value={codigo_amostra}
-        />
-        <input
-          type="text"
-          placeholder="Variedade da mandioca (ex: IAC 90)"
-          className="inputPrimary"
-          onChange={(e) => setVariedade(e.target.value)}
-          value={variedade}
-        />
-        <input
-          type="date"
-          placeholder="Data da coleta"
-          className="inputPrimary"
-          onChange={(e) => setDataColeta(e.target.value)}
-          value={data_coleta}
-        />
-        <input
-          type="text"
-          placeholder="Coletado por"
-          className="inputPrimary"
-          onChange={(e) => setColetadoPor(e.target.value)}
-          value={coletado_por}
-        />
-        <input
-          type="text"
-          placeholder="URL da imagem original"
-          className="inputPrimary"
-          onChange={(e) => setImagemOriginal(e.target.value)}
-          value={imagem_original}
-        />
+      <form id="createForm" className={styles.formGrid} onSubmit={handleSubmit}>
+        {/* Primeira coluna */}
+        <div className={styles.formColumn}>
+          <input
+            type="text"
+            placeholder="Código da amostra"
+            className={styles.inputCompact}
+            onChange={(e) => setCodigoAmostra(e.target.value)}
+            value={codigo_amostra}
+            required
+          />
+          <input
+            type="date"
+            placeholder="Data da coleta"
+            className={styles.inputCompact}
+            onChange={(e) => setDataColeta(e.target.value)}
+            value={data_coleta}
+            required
+          />
+          <input
+            type="text"
+            placeholder="Coletado por"
+            className={styles.inputCompact}
+            onChange={(e) => setColetadoPor(e.target.value)}
+            value={coletado_por}
+            required
+          />
+        </div>
 
-        <div className="subtitle">
-          <h2>📍 Localização</h2>
+        {/* Segunda coluna */}
+        <div className={styles.formColumn}>
+          <input
+            type="text"
+            placeholder="URL da imagem original"
+            className={styles.inputCompact}
+            onChange={(e) => setImagemOriginal(e.target.value)}
+            value={imagem_original}
+          />
+          <input
+            type="text"
+            placeholder="Município"
+            className={styles.inputCompact}
+            onChange={(e) => setMunicipio(e.target.value)}
+            value={municipio}
+          />
+          <input
+            type="text"
+            placeholder="Estado"
+            className={styles.inputCompact}
+            onChange={(e) => setEstado(e.target.value)}
+            value={estado}
+          />
+        </div>
+
+        {/* Seção de localização - largura completa */}
+        <div className={styles.locationSection}>
+          <h3 className={styles.locationSectionTitle}>📍 Localização</h3>
 
           {/* Status da geolocalização */}
           <div className={styles.locationStatus}>
@@ -248,62 +266,51 @@ const CreateContent = () => {
               </div>
             )}
           </div>
+
+          {/* Campos de localização manual em uma linha */}
+          {(manualLocation || locationStatus === "manual") && (
+            <div
+              style={{
+                display: "grid",
+                gridTemplateColumns: "1fr 1fr",
+                gap: "0.8rem",
+              }}
+            >
+              <input
+                type="number"
+                step="any"
+                placeholder="Latitude"
+                className={styles.inputCompact}
+                onChange={(e) => setLatitude(e.target.value)}
+                value={latitude}
+                required
+              />
+              <input
+                type="number"
+                step="any"
+                placeholder="Longitude"
+                className={styles.inputCompact}
+                onChange={(e) => setLongitude(e.target.value)}
+                value={longitude}
+                required
+              />
+            </div>
+          )}
+
+          {/* Display das coordenadas */}
+          {latitude && longitude && (
+            <div className={styles.locationDisplay}>
+              <p>
+                <strong>Coordenadas:</strong> {parseFloat(latitude).toFixed(6)},{" "}
+                {parseFloat(longitude).toFixed(6)}
+              </p>
+            </div>
+          )}
         </div>
 
-        {/* Campos de localização - mostrar apenas se necessário */}
-        {(manualLocation || locationStatus === "manual") && (
-          <>
-            <input
-              type="number"
-              step="any"
-              placeholder="Latitude"
-              className="inputPrimary"
-              onChange={(e) => setLatitude(e.target.value)}
-              value={latitude}
-              required
-            />
-            <input
-              type="number"
-              step="any"
-              placeholder="Longitude"
-              className="inputPrimary"
-              onChange={(e) => setLongitude(e.target.value)}
-              value={longitude}
-              required
-            />
-          </>
-        )}
-
-        {/* Campos de localização complementares */}
-        {latitude && longitude && (
-          <div className={styles.locationDisplay}>
-            <p>
-              <strong>Coordenadas:</strong> {parseFloat(latitude).toFixed(6)},{" "}
-              {parseFloat(longitude).toFixed(6)}
-            </p>
-          </div>
-        )}
-        <input
-          type="text"
-          placeholder="Município"
-          className="inputPrimary"
-          onChange={(e) => setMunicipio(e.target.value)}
-          value={municipio}
-        />
-        <input
-          type="text"
-          placeholder="Estado"
-          className="inputPrimary"
-          onChange={(e) => setEstado(e.target.value)}
-          value={estado}
-        />
-
-        <input
-          type="submit"
-          value="Cadastrar Amostra"
-          id="createBtn"
-          className="btnPrimary"
-        />
+        <button type="submit" className={styles.btnSubmit}>
+          Cadastrar Amostra
+        </button>
       </form>
     </div>
   );

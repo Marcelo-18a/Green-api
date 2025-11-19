@@ -1,0 +1,109 @@
+/* Layout Styles */
+.layout {
+  display: flex;
+  min-height: 100vh;
+  background-color: var(--bg-color);
+}
+
+/* Main Content */
+.mainContent {
+  flex: 1;
+  margin-left: 280px; /* Largura da sidebar */
+  min-height: 100vh;
+  background-image: url("/images/bg.png");
+  background-size: cover;
+  background-attachment: fixed;
+  background-position: center;
+  background-repeat: no-repeat;
+  transition: margin-left 0.3s ease;
+}
+
+.contentWrapper {
+  background-color: var(--bg-alpha);
+  min-height: 100vh;
+  padding: 1rem;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  overflow-y: auto;
+}
+
+/* Mobile Menu Button */
+.mobileMenuBtn {
+  display: none;
+  position: fixed;
+  top: 1rem;
+  left: 1rem;
+  z-index: 1002;
+  width: 50px;
+  height: 50px;
+  background: var(--fourth-color);
+  border: 1px solid var(--primary-color);
+  border-radius: 8px;
+  cursor: pointer;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+.mobileMenuBtn:hover {
+  background: rgba(34, 197, 94, 0.1);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(34, 197, 94, 0.3);
+}
+
+.hamburger {
+  width: 20px;
+  height: 2px;
+  background: var(--primary-color);
+  border-radius: 2px;
+  transition: all 0.3s ease;
+}
+
+.mobileMenuBtn:hover .hamburger {
+  background: var(--primary-color);
+  box-shadow: 0 0 8px rgba(34, 197, 94, 0.5);
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+  .mainContent {
+    margin-left: 260px; /* Sidebar menor em tablet */
+  }
+}
+
+@media (max-width: 768px) {
+  .mainContent {
+    margin-left: 0; /* Remove margem em mobile */
+  }
+  
+  .mobileMenuBtn {
+    display: flex;
+  }
+  
+  .contentWrapper {
+    padding: 0.5rem;
+    padding-top: 4rem; /* Espaço para o botão mobile */
+  }
+}
+
+@media (max-width: 480px) {
+  .contentWrapper {
+    padding: 0.25rem;
+    padding-top: 4rem;
+  }
+  
+  .mobileMenuBtn {
+    top: 0.5rem;
+    left: 0.5rem;
+    width: 45px;
+    height: 45px;
+  }
+  
+  .hamburger {
+    width: 18px;
+  }
+}

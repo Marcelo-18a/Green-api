@@ -2,8 +2,9 @@ import axios from "axios";
 
 export const axiosConfig = {
   headers: {
-    authorization: `Bearer ${typeof window !== "undefined" ? localStorage.getItem("token") : ""
-      }`,
+    authorization: `Bearer ${
+      typeof window !== "undefined" ? localStorage.getItem("token") : ""
+    }`,
   },
 };
 
@@ -15,8 +16,6 @@ export const login = async (email, password) => {
     });
     const token = res.data.token;
     localStorage.setItem("token", token);
-    // console.log(token)
-    alert("Login realizado com sucesso!")
     axiosConfig.headers.authorization = `Bearer ${token}`;
     return { success: true };
   } catch (error) {
@@ -27,5 +26,5 @@ export const login = async (email, password) => {
 export const logout = (router) => {
   localStorage.removeItem("token");
   axiosConfig.headers.authorization = "";
-  router.push("/")
-}
+  router.push("/");
+};

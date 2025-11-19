@@ -6,11 +6,21 @@ import EditContent from "../EditContent";
 import Map from "../Map";
 import Link from "next/link";
 import { axiosConfig } from "@/utils/auth";
+import { useNotification } from "../Notification/NotificationContext";
+import ConfirmDialog from "../ConfirmDialog";
 
 const HomeContent = () => {
   const [samples, setSamples] = useState([]); // Lista de amostras
   const [loading, setLoading] = useState(true);
   const [selectedSample, setSelectedSample] = useState(null); // Amostra selecionada para edição
+  const { showSuccess, showError } = useNotification();
+
+  // Estados para o dialog de confirmação
+  const [confirmDialog, setConfirmDialog] = useState({
+    isOpen: false,
+    message: "",
+    onConfirm: null,
+  });
 
   useEffect(() => {
     const fetchSamples = async () => {
@@ -22,6 +32,7 @@ const HomeContent = () => {
         setSamples(response.data.samples);
       } catch (error) {
         console.error(error);
+        showError("Erro ao carregar as amostras. Tente novamente.");
       } finally {
         setLoading(false);
       }
@@ -37,11 +48,12 @@ const HomeContent = () => {
         axiosConfig
       );
       if (response.status === 204) {
-        alert("A amostra foi excluída com sucesso.");
+        showSuccess("Amostra excluída com sucesso!");
         setSamples(samples.filter((sample) => sample._id !== sampleId));
       }
     } catch (error) {
       console.error(error);
+      showError("Erro ao excluir a amostra. Tente novamente.");
     }
   };
 
@@ -53,6 +65,63 @@ const HomeContent = () => {
   // Função para fechar o modal de edição
   const closeEditModal = () => {
     setSelectedSample(null);
+  };
+
+  // Função para abrir o dialog de confirmação
+  const openConfirmDialog = (sampleId) => {
+    setConfirmDialog({
+      isOpen: true,
+      message:
+        "Deseja mesmo excluir esta amostra? Esta ação não pode ser desfeita.",
+      onConfirm: () => {
+        deleteSample(sampleId);
+        setConfirmDialog({ ...confirmDialog, isOpen: false });
+      },
+    });
+  };
+
+  // Função para obter a classe CSS correta do nível de infecção
+  const getInfectionLevelClass = (grauInfeccao) => {
+    if (!grauInfeccao) return "";
+
+    const normalized = grauInfeccao
+      .toLowerCase()
+      .replace(/ã/g, "a")
+      .replace(/ç/g, "c")
+      .replace(/á|â|à/g, "a")
+      .replace(/é|ê/g, "e")
+      .replace(/í|î/g, "i")
+      .replace(/ó|ô|õ/g, "o")
+      .replace(/ú|û/g, "u")
+      .trim();
+
+    // Mapear diferentes variações para as classes CSS
+    if (["leve", "baixo", "baixa", "minimo", "minima"].includes(normalized)) {
+      return styles.leve;
+    }
+    if (["moderado", "moderada", "medio", "media"].includes(normalized)) {
+      return styles.moderado;
+    }
+    if (
+      [
+        "grave",
+        "severo",
+        "severa",
+        "alto",
+        "alta",
+        "critico",
+        "critica",
+      ].includes(normalized)
+    ) {
+      return styles.grave;
+    }
+
+    return styles[normalized] || "";
+  };
+
+  // Função para fechar o dialog de confirmação
+  const closeConfirmDialog = () => {
+    setConfirmDialog({ ...confirmDialog, isOpen: false });
   };
 
   return (
@@ -80,7 +149,7 @@ const HomeContent = () => {
         <div className={styles.samples} id={styles.samples}>
           {/* Lista de amostras */}
           {samples.map((sample) => (
-            <ul key={sample._id} className={styles.listSamples}>
+            <div key={sample._id} className={styles.sampleCard}>
               <div className={styles.sampleImg}>
                 <img
                   src={sample.imagem_original || "/images/leaf_default.png"}
@@ -88,57 +157,70 @@ const HomeContent = () => {
                 />
               </div>
               <div className={styles.sampleInfo}>
-                <h3>{sample.codigo_amostra}</h3>
-                <li>Espécie: {sample.especie}</li>
-                <li>Variedade: {sample.variedade}</li>
-                <li>
-                  Local: {sample.localizacao?.municipio},{" "}
-                  {sample.localizacao?.estado}
-                </li>
-                <li>
-                  Data da coleta:{" "}
-                  {new Date(sample.data_coleta).toLocaleDateString("pt-BR")}
-                </li>
-                <li>Nível de infecção: {sample.analise?.grau_infeccao}</li>
-                <li>
-                  Bactéria detectada: {sample.analise?.bacteria_detectada}
-                </li>
-                <li>
-                  Área afetada: {sample.analise?.porcentagem_area_afetada}%
-                </li>
-                <li>
-                  Confiabilidade do modelo:{" "}
-                  {sample.analise?.confiabilidade_modelo}%
-                </li>
-                <li>
-                  Data da análise:{" "}
-                  {new Date(sample.analise?.data_analise).toLocaleDateString(
-                    "pt-BR"
-                  )}
-                </li>
+                <h3 className={styles.sampleCode}>{sample.codigo_amostra}</h3>
 
-                {/* Botão de deletar */}
-                <button
-                  className={styles.btnDel}
-                  onClick={() => {
-                    const confirmed = window.confirm(
-                      "Deseja mesmo excluir esta amostra?"
-                    );
-                    if (confirmed) deleteSample(sample._id);
-                  }}
-                >
-                  Deletar
-                </button>
+                {/* Informações principais destacadas */}
+                <div className={styles.highlightInfo}>
+                  <div className={styles.infectionLevel}>
+                    <span className={styles.label}>Nível de Infecção</span>
+                    <span
+                      className={`${styles.badge} ${getInfectionLevelClass(
+                        sample.analise?.grau_infeccao
+                      )}`}
+                    >
+                      {sample.analise?.grau_infeccao}
+                    </span>
+                  </div>
 
-                {/* Botão de editar */}
-                <button
-                  className={styles.btnEdit}
-                  onClick={() => openEditModal(sample)}
-                >
-                  Editar
-                </button>
+                  <div className={styles.affectedArea}>
+                    <span className={styles.label}>Área Afetada</span>
+                    <span className={styles.percentage}>
+                      {sample.analise?.porcentagem_area_afetada}%
+                    </span>
+                  </div>
+                </div>
+
+                {/* Informações secundárias */}
+                <div className={styles.secondaryInfo}>
+                  <div className={styles.infoItem}>
+                    <span className={styles.infoLabel}>📍</span>
+                    <span>
+                      {sample.localizacao?.municipio},{" "}
+                      {sample.localizacao?.estado}
+                    </span>
+                  </div>
+
+                  <div className={styles.infoItem}>
+                    <span className={styles.infoLabel}>📅</span>
+                    <span>
+                      {new Date(sample.data_coleta).toLocaleDateString("pt-BR")}
+                    </span>
+                  </div>
+
+                  <div className={styles.infoItem}>
+                    <span className={styles.infoLabel}>🦠</span>
+                    <span>{sample.analise?.bacteria_detectada}</span>
+                  </div>
+                </div>
+
+                {/* Botões de ação */}
+                <div className={styles.actionButtons}>
+                  <button
+                    className={styles.btnEdit}
+                    onClick={() => openEditModal(sample)}
+                  >
+                    ✏️ Editar
+                  </button>
+
+                  <button
+                    className={styles.btnDel}
+                    onClick={() => openConfirmDialog(sample._id)}
+                  >
+                    🗑️ Deletar
+                  </button>
+                </div>
               </div>
-            </ul>
+            </div>
           ))}
         </div>
       </div>
@@ -147,6 +229,15 @@ const HomeContent = () => {
       {selectedSample && (
         <EditContent sample={selectedSample} onClose={closeEditModal} />
       )}
+
+      {/* Dialog de confirmação */}
+      <ConfirmDialog
+        isOpen={confirmDialog.isOpen}
+        message={confirmDialog.message}
+        type="danger"
+        onConfirm={confirmDialog.onConfirm}
+        onCancel={closeConfirmDialog}
+      />
     </div>
   );
 };

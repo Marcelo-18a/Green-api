@@ -5,11 +5,15 @@ import styles from "@/components/Menu/Menu.module.css";
 import Link from "next/link";
 import { logout } from "@/utils/auth";
 import { useRouter } from "next/router";
+import { useNotification } from "@/components/Notification/NotificationContext";
+import ConfirmDialog from "@/components/ConfirmDialog";
 
 const Menu = () => {
   const [menuIcon, setMenuIcon] = useState(<FaBars />);
   const [isActive, setIsActive] = useState(false);
+  const [showLogoutConfirm, setShowLogoutConfirm] = useState(false);
   const router = useRouter();
+  const { showSuccess } = useNotification();
 
   const activeMenu = () => {
     setIsActive(!isActive);
@@ -18,6 +22,16 @@ const Menu = () => {
     } else {
       setMenuIcon(<FaBars />);
     }
+  };
+
+  const handleLogout = () => {
+    setShowLogoutConfirm(true);
+  };
+
+  const confirmLogout = () => {
+    showSuccess("Logout realizado com sucesso!");
+    logout(router);
+    setShowLogoutConfirm(false);
   };
 
   return (
@@ -33,6 +47,12 @@ const Menu = () => {
           className={`${styles.menuItems} ${isActive ? styles.active : ""}`}
           id={styles.menuItems}
         >
+          <li className={styles.dashboardItem}>
+            <Link href="/dashboard">
+              <span className={styles.dashboardIcon}>📊</span>
+              Dashboard
+            </Link>
+          </li>
           <li>
             <Link href="/home">Home</Link>
           </li>
@@ -43,7 +63,7 @@ const Menu = () => {
             <Link href="/create">Cadastrar folhas</Link>
           </li>
           <li>
-            <a onClick={() => logout(router)} href="#">
+            <a onClick={handleLogout} href="#">
               Logout
             </a>
           </li>
@@ -55,6 +75,16 @@ const Menu = () => {
           {menuIcon}
         </i>
       </div>
+
+      <ConfirmDialog
+        isOpen={showLogoutConfirm}
+        onConfirm={confirmLogout}
+        onCancel={() => setShowLogoutConfirm(false)}
+        title="Confirmar Logout"
+        message="Tem certeza que deseja sair da aplicação?"
+        confirmText="Sair"
+        cancelText="Cancelar"
+      />
     </nav>
   );
 };

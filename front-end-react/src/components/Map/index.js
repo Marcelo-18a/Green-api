@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import dynamic from "next/dynamic";
 import styles from "./Map.module.css";
+import { useNotification } from "@/components/Notification/NotificationContext";
 
 // Importação dinâmica para evitar problemas de SSR
 const MapComponent = dynamic(() => import("./MapComponent"), {
@@ -9,6 +10,7 @@ const MapComponent = dynamic(() => import("./MapComponent"), {
 });
 
 const Map = ({ samples = [] }) => {
+  const { showWarning, showSuccess } = useNotification();
   const [userLocation, setUserLocation] = useState(null);
   const [locationError, setLocationError] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -48,6 +50,7 @@ const Map = ({ samples = [] }) => {
 
             setLocationError(errorMessage);
             setUserLocation(defaultLocation);
+            showWarning(`${errorMessage}. Usando localização padrão.`);
             setIsLoading(false);
           },
           {
@@ -59,6 +62,9 @@ const Map = ({ samples = [] }) => {
       } else {
         setLocationError("Geolocalização não é suportada por este navegador");
         setUserLocation(defaultLocation);
+        showWarning(
+          "Geolocalização não é suportada por este navegador. Usando localização padrão."
+        );
         setIsLoading(false);
       }
     };

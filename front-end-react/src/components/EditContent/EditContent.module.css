@@ -23,6 +23,45 @@
   width: 35%;
 }
 
+/* Estilos para labels */
+.editContent label {
+  display: block;
+  margin-bottom: 15px;
+  font-weight: 600;
+  color: #22c55e;
+  font-size: 14px;
+  transition: color 0.2s ease;
+}
+
+.editContent label:hover {
+  color: #16a34a;
+}
+
+.editContent label input {
+  display: block;
+  width: 100%;
+  margin-top: 5px;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 14px;
+  transition: border-color 0.3s ease;
+}
+
+.editContent label input:focus {
+  outline: none;
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25);
+}
+
+/* Campos readonly */
+.editContent label input[readonly] {
+  background-color: #f5f5f5 !important;
+  color: #6c757d !important;
+  cursor: not-allowed !important;
+  border-color: #e9ecef !important;
+}
+
 .modalClose {
   color: var(--label-color);
   float: right;

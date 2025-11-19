@@ -1,7 +1,6 @@
 import Head from "next/head";
-import Container from "@/components/Container";
+import LoginContainer from "@/components/LoginContainer";
 import LoginContent from "@/components/LoginContent";
-import Footer from "@/components/Footer";
 
 export default function Home() {
   return (
@@ -10,17 +9,16 @@ export default function Home() {
         <title>Green Leaf &copy; 2025</title>
         <meta
           name="description"
-          content="Consumo em React de uma API de Games"
+          content="Sistema de Análise de Folhas - Green Leaf"
         />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <main>
-        <Container>
+      <main style={{ height: "100vh", overflow: "hidden" }}>
+        <LoginContainer>
           <LoginContent />
-        </Container>
+        </LoginContainer>
       </main>
-      <Footer />
     </>
   );
 }

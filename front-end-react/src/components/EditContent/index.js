@@ -2,13 +2,13 @@ import { useState, useEffect } from "react";
 import styles from "@/components/EditContent/EditContent.module.css";
 import axios from "axios";
 import { axiosConfig } from "@/utils/auth";
+import { useNotification } from "../Notification/NotificationContext";
 
 const EditContent = ({ onClose, sample }) => {
   // Estados para os campos da amostra
   const [id, setId] = useState("");
   const [codigoAmostra, setCodigoAmostra] = useState("");
   const [especie, setEspecie] = useState("");
-  const [variedade, setVariedade] = useState("");
   const [dataColeta, setDataColeta] = useState("");
   const [coletadoPor, setColetadoPor] = useState("");
   const [localizacao, setLocalizacao] = useState({
@@ -29,13 +29,15 @@ const EditContent = ({ onClose, sample }) => {
   const [locationError, setLocationError] = useState("");
   const [manualLocation, setManualLocation] = useState(false);
 
+  // Hook de notificações
+  const { showSuccess, showError, showWarning } = useNotification();
+
   // Popula os estados quando a amostra é selecionada
   useEffect(() => {
     if (sample) {
       setId(sample._id);
       setCodigoAmostra(sample.codigo_amostra);
       setEspecie(sample.especie);
-      setVariedade(sample.variedade);
       setDataColeta(sample.data_coleta ? sample.data_coleta.split("T")[0] : "");
       setColetadoPor(sample.coletado_por);
       setLocalizacao({
@@ -149,7 +151,6 @@ const EditContent = ({ onClose, sample }) => {
     const updatedSample = {
       codigo_amostra: codigoAmostra,
       especie,
-      variedade,
       data_coleta: dataColeta,
       coletado_por: coletadoPor,
       imagem_original: imagemOriginal,
@@ -164,10 +165,7 @@ const EditContent = ({ onClose, sample }) => {
           : undefined,
       },
       analise: {
-        grau_infeccao: grauInfeccao,
         bacteria_detectada: bacteriaDetectada,
-        porcentagem_area_afetada: Number(porcentagemArea),
-        confiabilidade_modelo: Number(confiabilidadeModelo),
         data_analise: dataAnalise,
       },
     };
@@ -179,11 +177,12 @@ const EditContent = ({ onClose, sample }) => {
         axiosConfig
       );
       if (response.status === 200) {
-        alert("A amostra foi alterada com sucesso!");
+        showSuccess("Amostra alterada com sucesso!");
         onClose();
       }
     } catch (error) {
       console.error(error);
+      showError("Erro ao alterar a amostra. Tente novamente.");
     }
   };
 
@@ -197,41 +196,46 @@ const EditContent = ({ onClose, sample }) => {
           <h2>Editar Amostra de Folha</h2>
         </div>
         <form id="editForm" onSubmit={handleSubmit}>
-          <input
-            type="text"
-            placeholder="Código da Amostra"
-            value={codigoAmostra}
-            onChange={(e) => setCodigoAmostra(e.target.value)}
-            required
-          />
-          <input
-            type="text"
-            placeholder="Espécie"
-            value={especie}
-            onChange={(e) => setEspecie(e.target.value)}
-            required
-          />
-          <input
-            type="text"
-            placeholder="Variedade"
-            value={variedade}
-            onChange={(e) => setVariedade(e.target.value)}
-            required
-          />
-          <input
-            type="date"
-            placeholder="Data da Coleta"
-            value={dataColeta}
-            onChange={(e) => setDataColeta(e.target.value)}
-            required
-          />
-          <input
-            type="text"
-            placeholder="Coletado por"
-            value={coletadoPor}
-            onChange={(e) => setColetadoPor(e.target.value)}
-            required
-          />
+          <label>
+            Código da Amostra:
+            <input
+              type="text"
+              placeholder="Código da Amostra"
+              value={codigoAmostra}
+              onChange={(e) => setCodigoAmostra(e.target.value)}
+              required
+            />
+          </label>
+          <label>
+            Espécie:
+            <input
+              type="text"
+              placeholder="Espécie"
+              value={especie}
+              onChange={(e) => setEspecie(e.target.value)}
+              required
+            />
+          </label>
+          <label>
+            Data da Coleta:
+            <input
+              type="date"
+              placeholder="Data da Coleta"
+              value={dataColeta}
+              onChange={(e) => setDataColeta(e.target.value)}
+              required
+            />
+          </label>
+          <label>
+            Coletado por:
+            <input
+              type="text"
+              placeholder="Coletado por"
+              value={coletadoPor}
+              onChange={(e) => setColetadoPor(e.target.value)}
+              required
+            />
+          </label>
 
           <div className="subtitle">
             <h3>📍 Localização</h3>
@@ -292,24 +296,33 @@ const EditContent = ({ onClose, sample }) => {
             locationStatus === "manual" ||
             localizacao.latitude) && (
             <>
-              <input
-                type="number"
-                step="any"
-                placeholder="Latitude"
-                value={localizacao.latitude}
-                onChange={(e) =>
-                  setLocalizacao({ ...localizacao, latitude: e.target.value })
-                }
-              />
-              <input
-                type="number"
-                step="any"
-                placeholder="Longitude"
-                value={localizacao.longitude}
-                onChange={(e) =>
-                  setLocalizacao({ ...localizacao, longitude: e.target.value })
-                }
-              />
+              <label>
+                Latitude:
+                <input
+                  type="number"
+                  step="any"
+                  placeholder="Latitude"
+                  value={localizacao.latitude}
+                  onChange={(e) =>
+                    setLocalizacao({ ...localizacao, latitude: e.target.value })
+                  }
+                />
+              </label>
+              <label>
+                Longitude:
+                <input
+                  type="number"
+                  step="any"
+                  placeholder="Longitude"
+                  value={localizacao.longitude}
+                  onChange={(e) =>
+                    setLocalizacao({
+                      ...localizacao,
+                      longitude: e.target.value,
+                    })
+                  }
+                />
+              </label>
             </>
           )}
 
@@ -324,66 +337,94 @@ const EditContent = ({ onClose, sample }) => {
             </div>
           )}
 
-          <input
-            type="text"
-            placeholder="Município"
-            value={localizacao.municipio}
-            onChange={(e) =>
-              setLocalizacao({ ...localizacao, municipio: e.target.value })
-            }
-            required
-          />
-          <input
-            type="text"
-            placeholder="Estado"
-            value={localizacao.estado}
-            onChange={(e) =>
-              setLocalizacao({ ...localizacao, estado: e.target.value })
-            }
-            required
-          />
-          <input
-            type="text"
-            placeholder="URL da Imagem"
-            value={imagemOriginal}
-            onChange={(e) => setImagemOriginal(e.target.value)}
-          />
+          <label>
+            Município:
+            <input
+              type="text"
+              placeholder="Município"
+              value={localizacao.municipio}
+              onChange={(e) =>
+                setLocalizacao({ ...localizacao, municipio: e.target.value })
+              }
+              required
+            />
+          </label>
+          <label>
+            Estado:
+            <input
+              type="text"
+              placeholder="Estado"
+              value={localizacao.estado}
+              onChange={(e) =>
+                setLocalizacao({ ...localizacao, estado: e.target.value })
+              }
+              required
+            />
+          </label>
+          <label>
+            URL da Imagem:
+            <input
+              type="text"
+              placeholder="URL da Imagem"
+              value={imagemOriginal}
+              onChange={(e) => setImagemOriginal(e.target.value)}
+            />
+          </label>
 
-          <input
-            type="text"
-            placeholder="Nível de Infecção"
-            value={grauInfeccao}
-            onChange={(e) => setGrauInfeccao(e.target.value)}
-            required
-          />
-          <input
-            type="text"
-            placeholder="Bactéria Detectada"
-            value={bacteriaDetectada}
-            onChange={(e) => setBacteriaDetectada(e.target.value)}
-            required
-          />
-          <input
-            type="number"
-            placeholder="% Área Afetada"
-            value={porcentagemArea}
-            onChange={(e) => setPorcentagemArea(e.target.value)}
-            required
-          />
-          <input
-            type="number"
-            placeholder="% Confiabilidade Modelo"
-            value={confiabilidadeModelo}
-            onChange={(e) => setConfiabilidadeModelo(e.target.value)}
-            required
-          />
-          <input
-            type="date"
-            placeholder="Data da Análise"
-            value={dataAnalise}
-            onChange={(e) => setDataAnalise(e.target.value)}
-            required
-          />
+          <div className="subtitle">
+            <h3>🔬 Dados da Análise</h3>
+          </div>
+
+          <label>
+            Nível de Infecção:
+            <input
+              type="text"
+              placeholder="Nível de Infecção"
+              value={grauInfeccao}
+              readOnly
+              style={{ backgroundColor: "#f5f5f5", cursor: "not-allowed" }}
+            />
+          </label>
+          <label>
+            Bactéria Detectada:
+            <input
+              type="text"
+              placeholder="Bactéria Detectada"
+              value={bacteriaDetectada}
+              onChange={(e) => setBacteriaDetectada(e.target.value)}
+              required
+            />
+          </label>
+          <label>
+            Área Afetada:
+            <input
+              type="number"
+              placeholder="Área Afetada"
+              value={porcentagemArea}
+              readOnly
+              style={{ backgroundColor: "#f5f5f5", cursor: "not-allowed" }}
+            />
+          </label>
+          <label>
+            Confiabilidade Modelo:
+            <input
+              type="number"
+              placeholder="Confiabilidade Modelo"
+              value={confiabilidadeModelo}
+              readOnly
+              style={{ backgroundColor: "#f5f5f5", cursor: "not-allowed" }}
+            />
+          </label>
+          <label>
+            Data da Análise:
+            <input
+              type="date"
+              placeholder="Data da Análise"
+              value={dataAnalise}
+              onChange={(e) => setDataAnalise(e.target.value)}
+              required
+            />
+          </label>
 
           <input type="submit" value="Alterar" className="btnPrimary" />
         </form>

@@ -1,28 +1,22 @@
 import Head from "next/head";
-import Container from "@/components/Container";
-import Menu from "@/components/Menu";
-import Footer from "@/components/Footer";
+import Layout from "@/components/Layout";
 import CreateContent from "@/components/CreateContent";
 
-export default function Homepage() {
+export default function CreatePage() {
   return (
     <>
       <Head>
-        <title>Green Leaf &copy; 2025</title>
+        <title>Cadastrar Folhas - Green Leaf &copy; 2025</title>
         <meta
           name="description"
-          content="Consumo em React de uma API de Games"
+          content="Cadastro de amostras de folhas para análise"
         />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <main>
-        <Menu />
-        <Container>
-          <CreateContent />
-        </Container>
-      </main>
-      <Footer />
+      <Layout>
+        <CreateContent />
+      </Layout>
     </>
   );
 }

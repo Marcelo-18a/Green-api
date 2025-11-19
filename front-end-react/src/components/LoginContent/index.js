@@ -1,22 +1,37 @@
 import { useState } from "react";
 import { login } from "@/utils/auth";
 import { useRouter } from "next/router";
+import { useNotification } from "@/components/Notification/NotificationContext";
 import styles from "@/components/LoginContent/LoginContent.module.css";
 
 const LoginContent = () => {
   const router = useRouter();
+  const { showError, showSuccess } = useNotification();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
   const onSubmit = async (e) => {
     e.preventDefault();
-    const result = await login(email, password);
-    if (result.success) {
-      router.push("/home");
-    } else {
-      alert("Falha ao fazer o login. Tente novamente")
+
+    // Validação básica
+    if (!email || !password) {
+      showError("Por favor, preencha todos os campos");
+      return;
     }
 
+    try {
+      const result = await login(email, password);
+      if (result.success) {
+        showSuccess("Login realizado com sucesso!");
+        router.push("/home");
+      } else {
+        showError(
+          "Falha ao fazer o login. Verifique suas credenciais e tente novamente"
+        );
+      }
+    } catch (error) {
+      showError("Erro de conexão. Tente novamente em alguns instantes");
+    }
   };
 
   return (

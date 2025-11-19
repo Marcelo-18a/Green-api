@@ -10,6 +10,16 @@
   text-decoration: none;
 }
 
+html, body {
+  overflow-x: hidden; /* Remove scroll horizontal */
+  height: 100%;
+}
+
+body {
+  font-family: "Poppins", sans-serif;
+  background-color: var(--bg-color);
+}
+
 :root {
   --bg-color: #010101;
   --bg-alpha: #010101aa;
@@ -68,18 +78,22 @@ input {
 }
 
 .btnPrimary {
-  font-family: "Poppins";
-  background-color: var(--primary-color);
-  color: var(--secondary-color);
-  height: 3rem;
-  width: 100%;
+  background: linear-gradient(45deg, var(--primary-color), #16a34a);
+  color: white !important;
   border: none;
   cursor: pointer;
+  font-weight: 600;
+  font-family: "Poppins";
+  transition: all 0.3s ease;
+  margin-top: 0.5rem;
 }
 
 .btnPrimary:hover {
-  background-color: var(--primary-hover);
+  background: linear-gradient(45deg, #16a34a, #15803d);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(34, 197, 94, 0.3);
 }
+
 /* Fim Form */
 
 /* Fim estilos gerais */
