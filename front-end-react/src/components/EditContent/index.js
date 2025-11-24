@@ -166,7 +166,16 @@ const EditContent = ({ onClose, sample }) => {
       },
       analise: {
         bacteria_detectada: bacteriaDetectada,
-        data_analise: dataAnalise,
+        grau_infeccao: grauInfeccao || undefined,
+        porcentagem_area_afetada:
+          porcentagemArea !== "" && porcentagemArea !== null
+            ? Number(porcentagemArea)
+            : undefined,
+        confiabilidade_modelo:
+          confiabilidadeModelo !== "" && confiabilidadeModelo !== null
+            ? Number(confiabilidadeModelo)
+            : undefined,
+        data_analise: dataAnalise || undefined,
       },
     };
 

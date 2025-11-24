@@ -4,10 +4,9 @@ import * as XLSX from "xlsx";
 import styles from "./Dashboard.module.css";
 import Loading from "../Loading";
 import { axiosConfig } from "@/utils/auth";
-import { useNotification } from "@/components/Notification/NotificationContext";
 
 const Dashboard = () => {
-  const { showError, showSuccess } = useNotification();
+  // notificações removidas do Dashboard (logs em substituição)
   const [samples, setSamples] = useState([]);
   const [loading, setLoading] = useState(true);
   const [dateFilter, setDateFilter] = useState("all"); // all, week, month, year
@@ -44,7 +43,7 @@ const Dashboard = () => {
         }
       } catch (error) {
         console.error("Erro ao buscar dados:", error);
-        showError("Erro ao carregar dados do dashboard");
+        // Notificação removida: manter log para depuração
         // Fallback to local calculation if API fails
         try {
           const response = await axios.get(
@@ -55,7 +54,7 @@ const Dashboard = () => {
           calculateStats(response.data.samples);
         } catch (fallbackError) {
           console.error("Erro no fallback:", fallbackError);
-          showError("Erro de conexão. Não foi possível carregar os dados");
+          // Notificação removida: manter log para depuração
         }
       } finally {
         setLoading(false);
@@ -192,11 +191,11 @@ const Dashboard = () => {
       // Fazer download do arquivo
       XLSX.writeFile(workbook, filename);
 
-      // Mostrar notificação de sucesso
-      showSuccess(`Arquivo exportado com sucesso: ${filename}`);
+      // Notificação removida: log de sucesso
+      console.log(`Arquivo exportado com sucesso: ${filename}`);
     } catch (error) {
       console.error("Erro ao exportar para Excel:", error);
-      showError("Erro ao exportar arquivo Excel. Tente novamente.");
+      // Notificação removida: manter log de erro
     }
   };
 
@@ -301,21 +300,6 @@ const Dashboard = () => {
         </p>
 
         <div className={styles.controls}>
-          <div className={styles.filterGroup}>
-            <label htmlFor="dateFilter">Período:</label>
-            <select
-              id="dateFilter"
-              value={dateFilter}
-              onChange={(e) => setDateFilter(e.target.value)}
-              className={styles.filterSelect}
-            >
-              <option value="all">Todos os períodos</option>
-              <option value="week">Última semana</option>
-              <option value="month">Último mês</option>
-              <option value="year">Último ano</option>
-            </select>
-          </div>
-
           <button
             onClick={exportToExcel}
             className={styles.exportButton}
@@ -374,7 +358,8 @@ const Dashboard = () => {
           <div className={styles.statIcon}>⏰</div>
           <div className={styles.statContent}>
             <h3>{stats.recentSamples}</h3>
-            <p>Amostras Recentes (7 dias)</p>
+            <p>Amostras Recentes</p>
+            <p>(7 dias)</p>
           </div>
         </div>
       </div>
