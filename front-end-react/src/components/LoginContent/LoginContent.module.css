@@ -9,6 +9,25 @@
   gap: 2rem;
   padding: 2rem;
   overflow: hidden;
+  position: relative;
+}
+
+/* Container do toggle de tema */
+.themeToggleContainer {
+  position: absolute;
+  top: 2rem;
+  right: 2rem;
+  z-index: 100;
+}
+
+.fixedToggle {
+  opacity: 0.8;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+.fixedToggle:hover {
+  opacity: 1;
 }
 
 .loginContent .logo {
@@ -73,6 +92,31 @@
   border-color: var(--primary-color);
   box-shadow: 0 0 0 2px rgba(34, 197, 94, 0.2);
 }
+
+/* Link para cadastro */
+.registerLink {
+  margin-top: 1rem;
+  text-align: center;
+  font-size: 0.9rem;
+}
+
+.registerLink p {
+  margin: 0;
+  color: var(--secondary-color);
+}
+
+.registerText {
+  color: var(--primary-color);
+  cursor: pointer;
+  text-decoration: underline;
+  font-weight: 500;
+  transition: color 0.3s ease;
+}
+
+.registerText:hover {
+  color: var(--primary-alpha);
+}
+
 /* Fim conteúdo Login */
 
 /* RESPONSIVIDADE */
@@ -104,6 +148,11 @@
     gap: 1rem;
     padding: 1rem;
     min-height: 100vh;
+  }
+
+  .themeToggleContainer {
+    top: 1rem;
+    right: 1rem;
   }
 
   .loginContent .logo .logoImg {

@@ -14,13 +14,13 @@
 .title {
   font-size: 2.5rem;
   font-weight: 700;
-  color: var(--primary-color);
+  color: var(--secondary-color);
   margin-bottom: 0.5rem;
 }
 
 .subtitle {
   font-size: 1.1rem;
-  color: var(--label-color);
+  color: var(--secondary-color);
   font-weight: 400;
 }
 
@@ -69,7 +69,7 @@
 }
 
 .statContent p {
-  color: var(--label-color);
+  color: var(--secondary-color);
   margin: 0.5rem 0 0 0;
   font-size: 0.9rem;
 }
@@ -324,7 +324,7 @@
 .dateLabel {
   font-size: 1rem;
   font-weight: 600;
-  color: var(--primary-color);
+  color: var(--secondary-color);
   margin: 0;
   display: flex;
   align-items: center;

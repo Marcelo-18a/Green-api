@@ -2,6 +2,7 @@ import { useState } from "react";
 import { login } from "@/utils/auth";
 import { useRouter } from "next/router";
 import { useNotification } from "@/components/Notification/NotificationContext";
+import ThemeToggleCompact from "@/components/ThemeToggleCompact";
 import styles from "@/components/LoginContent/LoginContent.module.css";
 
 const LoginContent = () => {
@@ -36,6 +37,11 @@ const LoginContent = () => {
 
   return (
     <div className={styles.loginContent}>
+      {/* THEME TOGGLE */}
+      <div className={styles.themeToggleContainer}>
+        <ThemeToggleCompact className={styles.fixedToggle} />
+      </div>
+
       {/* LOGO */}
       {/* <div className={styles.logo}>
         <img
@@ -77,6 +83,18 @@ const LoginContent = () => {
               className={`${styles.input} ${"btnPrimary"}`}
             />
           </form>
+        </div>
+        {/* LINK PARA CADASTRO */}
+        <div className={styles.registerLink}>
+          <p>
+            Não tem uma conta?{" "}
+            <span
+              className={styles.registerText}
+              onClick={() => router.push("/register")}
+            >
+              Faça seu cadastro aqui
+            </span>
+          </p>
         </div>
       </div>
     </div>

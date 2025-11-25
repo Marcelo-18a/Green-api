@@ -7,6 +7,7 @@ import { logout } from "@/utils/auth";
 import { useRouter } from "next/router";
 import { useNotification } from "@/components/Notification/NotificationContext";
 import ConfirmDialog from "@/components/ConfirmDialog";
+import ThemeToggleMini from "@/components/ThemeToggleMini";
 
 const Menu = () => {
   const [menuIcon, setMenuIcon] = useState(<FaBars />);
@@ -42,6 +43,11 @@ const Menu = () => {
         </Link>
       </div>
       <div className={styles.menu}>
+        {/* Theme Toggle - Desktop */}
+        <div className={styles.themeToggleDesktop}>
+          <ThemeToggleMini position="relative" />
+        </div>
+
         {/* isActive && styles.active */}
         <ul
           className={`${styles.menuItems} ${isActive ? styles.active : ""}`}
@@ -61,6 +67,9 @@ const Menu = () => {
           </li>
           <li>
             <Link href="/create">Cadastrar folhas</Link>
+          </li>
+          <li className={styles.themeToggleItem}>
+            <ThemeToggleMini position="relative" />
           </li>
           <li>
             <a onClick={handleLogout} href="#">

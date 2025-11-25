@@ -18,11 +18,20 @@ html, body {
 body {
   font-family: "Poppins", sans-serif;
   background-color: var(--bg-color);
+  color: var(--secondary-color);
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Transições suaves para todos os elementos que usam variáveis CSS */
+* {
+  transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease;
 }
 
 :root {
+  /* Tema Escuro (padrão) */
   --bg-color: #010101;
   --bg-alpha: #010101aa;
+  --bg-image: url("/images/bg.png");
   --primary-color: #22C55E;
   --primary-alpha: #2383f249;
   --primary-hover: #0a54a9;
@@ -31,6 +40,57 @@ body {
   --fourth-color: #121212;
   --fourth-color-alpha: #12121280;
   --label-color: #777;
+  
+  /* Variáveis específicas do tema toggle */
+  --theme-toggle-bg: var(--fourth-color);
+  --theme-toggle-bg-hover: var(--third-color);
+  --theme-toggle-color: var(--secondary-color);
+  --theme-toggle-border: var(--primary-color);
+  --theme-toggle-shadow: rgba(34, 197, 94, 0.2);
+}
+
+/* Tema Claro */
+[data-theme="light"] {
+  --bg-color: #f8fafc;
+  --bg-alpha: #f8fafcaa;
+  --bg-image: url("/images/bg2.png");
+  --primary-color: #16a34a;
+  --primary-alpha: #16a34a49;
+  --primary-hover: #15803d;
+  --secondary-color: #1e293b;
+  --third-color: #e2e8f0;
+  --fourth-color: #ffffff;
+  --fourth-color-alpha: #ffffff80;
+  --label-color: #64748b;
+  
+  /* Variáveis específicas do tema toggle */
+  --theme-toggle-bg: #ffffff;
+  --theme-toggle-bg-hover: #f1f5f9;
+  --theme-toggle-color: #1e293b;
+  --theme-toggle-border: #e2e8f0;
+  --theme-toggle-shadow: rgba(22, 163, 74, 0.15);
+}
+
+/* Tema Escuro (explícito) */
+[data-theme="dark"] {
+  --bg-color: #010101;
+  --bg-alpha: #010101aa;
+  --bg-image: url("/images/bg.png");
+  --primary-color: #22C55E;
+  --primary-alpha: #2383f249;
+  --primary-hover: #0a54a9;
+  --secondary-color: #d6d6d6;
+  --third-color: #060606;
+  --fourth-color: #121212;
+  --fourth-color-alpha: #12121280;
+  --label-color: #777;
+  
+  /* Variáveis específicas do tema toggle */
+  --theme-toggle-bg: var(--fourth-color);
+  --theme-toggle-bg-hover: var(--third-color);
+  --theme-toggle-color: var(--secondary-color);
+  --theme-toggle-border: var(--primary-color);
+  --theme-toggle-shadow: rgba(34, 197, 94, 0.2);
 }
 
 ::placeholder {

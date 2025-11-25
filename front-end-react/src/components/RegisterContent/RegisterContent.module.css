@@ -1,0 +1,192 @@
+/* Início conteúdo Register */
+.registerContent {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  min-height: 100vh;
+  align-items: center;
+  justify-content: center;
+  gap: 2rem;
+  padding: 2rem;
+  overflow: hidden;
+  position: relative;
+}
+
+/* Container do toggle de tema */
+.themeToggleContainer {
+  position: absolute;
+  top: 2rem;
+  right: 2rem;
+  z-index: 100;
+}
+
+.fixedToggle {
+  opacity: 0.8;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+.fixedToggle:hover {
+  opacity: 1;
+}
+
+.registerContent .registerCard {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 28rem;
+  max-width: 90vw;
+  height: auto;
+  min-height: 26rem;
+  padding: 2rem;
+  backdrop-filter: blur(2px);
+  -webkit-backdrop-filter: blur(2px);
+  border-radius: 1rem;
+  box-shadow: 0 8px 32px 0 var(--primary-alpha);
+  border: solid 1px var(--secondary-color);
+  font-family: "Poppins";
+  color: var(--secondary-color);
+}
+
+.registerContent .registerCard .registerCardHeader {
+  font-size: 1rem;
+  margin-bottom: 1.5rem;
+  text-align: center;
+}
+
+.registerContent .registerCard .registerCardHeader h3 {
+  margin: 0;
+  font-weight: 600;
+}
+
+.registerContent .registerCard .registerCardBody {
+  width: 80%;
+  max-width: 300px;
+}
+
+.input {
+  width: 100%;
+  padding: 1rem;
+  margin-bottom: 1rem;
+  border: 1px solid var(--primary-color);
+  background-color: var(--fourth-color);
+  color: var(--secondary-color);
+  border-radius: 8px;
+  font-family: "Poppins";
+  font-size: 0.9rem;
+  transition: all 0.3s ease;
+}
+
+.input:focus {
+  outline: none;
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 2px rgba(34, 197, 94, 0.2);
+}
+
+.input:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* Link para login */
+.loginLink {
+  margin-top: 1rem;
+  text-align: center;
+  font-size: 0.9rem;
+}
+
+.loginLink p {
+  margin: 0;
+  color: var(--secondary-color);
+}
+
+.loginText {
+  color: var(--primary-color);
+  cursor: pointer;
+  text-decoration: underline;
+  font-weight: 500;
+  transition: color 0.3s ease;
+}
+
+.loginText:hover {
+  color: var(--primary-alpha);
+}
+
+/* Fim conteúdo Register */
+
+/* RESPONSIVIDADE */
+@media (max-width: 1200px) { 
+  .registerContent {
+    gap: 1.5rem;
+    padding: 1.5rem;
+  }
+  
+  .registerContent .registerCard {
+    width: 26rem;
+    max-width: 90vw;
+    padding: 1.5rem;
+  }
+
+  .registerContent .registerCard .registerCardHeader {
+    font-size: 0.9rem;
+    margin-bottom: 1rem;
+  }
+
+  .input {
+    padding: 0.9rem;
+    margin-bottom: 0.8rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .registerContent {
+    gap: 1rem;
+    padding: 1rem;
+    min-height: 100vh;
+  }
+
+  .themeToggleContainer {
+    top: 1rem;
+    right: 1rem;
+  }
+
+  .registerContent .registerCard {
+    width: 22rem;
+    max-width: 95vw;
+    padding: 1.5rem;
+    min-height: auto;
+  }
+
+  .registerContent .registerCard .registerCardHeader {
+    font-size: 1rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .registerContent .registerCard .registerCardBody {
+    width: 90%;
+  }
+
+  .input {
+    padding: 1rem;
+    margin-bottom: 1rem;
+    font-size: 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .registerContent {
+    padding: 0.5rem;
+  }
+
+  .registerContent .registerCard {
+    width: 100%;
+    max-width: 95vw;
+    padding: 1rem;
+  }
+
+  .registerContent .registerCard .registerCardBody {
+    width: 95%;
+  }
+}
+/* FIM RESPONSIVIDADE */

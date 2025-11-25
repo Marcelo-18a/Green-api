@@ -9,6 +9,22 @@
   background-color: var(--fourth-color);
 }
 
+.navbar .menu {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+/* Toggle de tema na versão desktop */
+.themeToggleDesktop {
+  display: flex;
+  align-items: center;
+}
+
+.menuThemeToggle {
+  margin-right: 0.5rem;
+}
+
 .navbar .logo img {
   padding: 0.3rem; /* Reduzido de 0.5rem para 0.3rem */
   margin-left: 1rem;
@@ -45,6 +61,8 @@
   font-size: 2rem;
   cursor: pointer;
   margin-right: 1.5rem;
+  align-items: center;
+  gap: 0.5rem;
 }
 /* Fim Navbar */
 
@@ -95,8 +113,12 @@
   }
 
   .menuBtn {
-    display: block;
+    display: flex;
     z-index: 999;
+  }
+
+  .themeToggleDesktop {
+    display: none;
   }
 
   #menuItems.active {
@@ -133,3 +155,13 @@
   font-size: 1.2rem;
   filter: drop-shadow(0 0 5px rgba(34, 197, 94, 0.5));
 }
+
+/* Item específico para toggle de tema */
+.themeToggleItem {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.5rem 0.8rem !important;
+}
+
+/* Fim Navbar */

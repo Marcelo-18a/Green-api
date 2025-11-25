@@ -14,14 +14,14 @@
 }
 
 .header h1 {
-  color: white;
+  color: var(--secondary-color); /* Cor adaptativa - escura no claro, clara no escuro */
   font-size: 2.5rem;
   margin-bottom: 15px;
   font-weight: 600;
 }
 
 .header p {
-  color: white;
+  color: var(--secondary-color); /* Cor adaptativa - escura no claro, clara no escuro */
   font-size: 1.1rem;
   max-width: 800px;
   margin: 0 auto 20px auto;
@@ -54,9 +54,9 @@
 }
 
 .errorMessage {
-  background-color: #f8d7da;
-  border: 1px solid #f5c6cb;
-  color: #721c24;
+  background-color: rgba(220, 38, 38, 0.1); /* Vermelho adaptativo */
+  border: 1px solid rgba(220, 38, 38, 0.3);
+  color: #dc2626;
   padding: 20px;
   border-radius: 8px;
   margin: 20px;
@@ -66,6 +66,7 @@
 .errorMessage p {
   margin: 0 0 15px 0;
   font-weight: 500;
+  color: #dc2626; /* Garantir que o parágrafo tenha a cor correta */
 }
 
 .errorMessage button {
@@ -90,7 +91,7 @@
 .loadingContainer {
   text-align: center;
   padding: 60px 20px;
-  color: #6c757d;
+  color: var(--label-color); /* Cor adaptativa */
 }
 
 .loadingContainer p {
@@ -107,15 +108,15 @@
 }
 
 .infoCard {
-  background-color: #f8f9fa;
-  border: 1px solid #dee2e6;
+  background-color: var(--fourth-color); /* Fundo adaptativo */
+  border: 1px solid var(--label-color);
   border-radius: 8px;
   padding: 20px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
 }
 
 .infoCard h3 {
-  color: #28a745;
+  color: var(--primary-color); /* Verde adaptativo */
   font-size: 1.2rem;
   margin: 0 0 15px 0;
   display: flex;
@@ -131,9 +132,9 @@
 
 .infoCard li {
   padding: 6px 0;
-  color: #495057;
+  color: var(--secondary-color); /* Cor adaptativa */
   font-size: 0.95rem;
-  border-bottom: 1px solid #e9ecef;
+  border-bottom: 1px solid var(--label-color);
 }
 
 .infoCard li:last-child {
@@ -141,7 +142,8 @@
 }
 
 .infoCard strong {
-  color: #333;
+  color: var(--secondary-color); /* Cor adaptativa */
+  font-weight: 600;
 }
 
 /* Responsividade */

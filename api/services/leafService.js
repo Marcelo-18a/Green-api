@@ -1,7 +1,7 @@
 import LeafSample from "../models/LeafSample.js";
 
 class leafSampleService {
-  // 🔹 Listar todas as amostras
+  // 🔹 Listar todas as amostras (mantém para compatibilidade)
   async getAll() {
     try {
       const samples = await LeafSample.find();
@@ -11,8 +11,19 @@ class leafSampleService {
     }
   }
 
+  // 🔹 Listar todas as amostras de um usuário específico
+  async getAllByUser(userId) {
+    try {
+      const samples = await LeafSample.find({ userId: userId });
+      return samples;
+    } catch (error) {
+      console.error("Erro ao listar amostras do usuário:", error);
+    }
+  }
+
   // 🔹 Cadastrar uma nova amostra
   async Create(
+    userId,
     codigo_amostra,
     especie,
     variedade,
@@ -24,6 +35,7 @@ class leafSampleService {
   ) {
     try {
       const newSample = new LeafSample({
+        userId,
         codigo_amostra,
         especie,
         variedade,
@@ -35,7 +47,9 @@ class leafSampleService {
       });
 
       await newSample.save();
-      console.log(`Amostra ${codigo_amostra} cadastrada com sucesso.`);
+      console.log(
+        `Amostra ${codigo_amostra} cadastrada com sucesso para o usuário ${userId}.`
+      );
       return newSample;
     } catch (error) {
       console.error("Erro ao cadastrar amostra:", error);
@@ -94,6 +108,16 @@ class leafSampleService {
       return sample;
     } catch (error) {
       console.error("Erro ao buscar amostra:", error);
+    }
+  }
+
+  // 🔹 Buscar uma amostra específica de um usuário
+  async getOneByUserAndId(userId, id) {
+    try {
+      const sample = await LeafSample.findOne({ _id: id, userId: userId });
+      return sample;
+    } catch (error) {
+      console.error("Erro ao buscar amostra do usuário:", error);
     }
   }
 }

@@ -5,11 +5,11 @@ const analysisSchema = new mongoose.Schema({
     type: String,
     default: "Xanthomonas phaseoli",
   },
-  grau_infeccao: String,             // Ex: "Leve", "Moderada", "Grave"
-  porcentagem_area_afetada: Number,  // Ex: 32.5 (% da folha afetada)
-  confiabilidade_modelo: Number,     // Ex: 95 (% de confiança da IA)
+  grau_infeccao: String, // Ex: "Leve", "Moderada", "Grave"
+  porcentagem_area_afetada: Number, // Ex: 32.5 (% da folha afetada)
+  confiabilidade_modelo: Number, // Ex: 95 (% de confiança da IA)
   data_analise: { type: Date, default: Date.now },
-  imagem_segmentada: String,         // URL da imagem com áreas afetadas destacadas
+  imagem_segmentada: String, // URL da imagem com áreas afetadas destacadas
 });
 
 const geoSchema = new mongoose.Schema({
@@ -20,14 +20,19 @@ const geoSchema = new mongoose.Schema({
 });
 
 const leafSampleSchema = new mongoose.Schema({
-  codigo_amostra: String,            // Identificador único da amostra
+  codigo_amostra: String, // Identificador único da amostra
   especie: { type: String, default: "Manihot esculenta" },
-  variedade: String,                 // Ex: "IAC 90"
+  variedade: String, // Ex: "IAC 90"
   data_coleta: Date,
   coletado_por: String,
-  imagem_original: String,           // Caminho/URL da imagem enviada
-  localizacao: geoSchema,            // Dados geográficos da coleta
-  analise: analysisSchema,           // Resultados da classificação IA
+  imagem_original: String, // Caminho/URL da imagem enviada
+  localizacao: geoSchema, // Dados geográficos da coleta
+  analise: analysisSchema, // Resultados da classificação IA
+  userId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "User",
+    required: true,
+  }, // ID do usuário proprietário da amostra
 });
 
 const LeafSample = mongoose.model("LeafSample", leafSampleSchema);

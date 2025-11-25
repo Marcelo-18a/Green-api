@@ -1,5 +1,5 @@
 .containerCover {
-  background-image: url("/images/bg.png");
+  background-image: var(--bg-image);
   background-size: cover;
   background-attachment: fixed;
   background-position: center;
@@ -7,6 +7,7 @@
   width: 100vw;
   min-height: 100vh;
   overflow-x: hidden;
+  transition: background-image 0.3s ease;
 }
 
 .container {

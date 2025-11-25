@@ -1,0 +1,27 @@
+.globalToggle {
+  position: fixed;
+  top: 4.5rem; /* Abaixo do menu */
+  right: 1rem;
+  z-index: 999;
+  opacity: 0.7;
+  transition: opacity 0.3s ease;
+}
+
+.globalToggle:hover {
+  opacity: 1;
+}
+
+/* Em telas menores, posicionar melhor */
+@media (max-width: 768px) {
+  .globalToggle {
+    top: 3.5rem;
+    right: 0.8rem;
+  }
+}
+
+/* Se o menu mobile estiver ativo, esconder temporariamente */
+@media (max-width: 768px) {
+  .globalToggle {
+    z-index: 998; /* Menor que o menu mobile */
+  }
+}
