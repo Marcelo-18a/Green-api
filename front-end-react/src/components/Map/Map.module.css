@@ -58,8 +58,12 @@
 }
 
 @keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
 }
 
 /* Debug info */
@@ -210,7 +214,7 @@
 .mapLegend h4 {
   margin: 0 0 10px 0;
   font-size: 16px;
-  color: #333;
+  color: #000;
 }
 
 .legendItem {
@@ -218,6 +222,14 @@
   align-items: center;
   margin-bottom: 8px;
   font-size: 14px;
+}
+
+/* Força cor preta nos textos da legenda (título e itens) */
+.mapLegend,
+.mapLegend h4,
+.mapLegend .legendItem,
+.mapLegend .legendItem span {
+  color: #000;
 }
 
 .legendItem:last-child {

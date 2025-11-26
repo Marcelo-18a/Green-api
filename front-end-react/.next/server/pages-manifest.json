@@ -3,9 +3,7 @@
   "/_error": "pages/_error.js",
   "/_document": "pages/_document.js",
   "/home": "pages/home.js",
+  "/dashboard": "pages/dashboard.js",
   "/map": "pages/map.js",
-  "/create": "pages/create.js",
-  "/": "pages/index.js",
-  "/register": "pages/register.js",
-  "/dashboard": "pages/dashboard.js"
+  "/create": "pages/create.js"
 }

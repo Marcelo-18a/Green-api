@@ -8,12 +8,6 @@ const Sidebar = ({ isOpen = false, onClose }) => {
 
   const menuItems = [
     {
-      href: "/dashboard",
-      icon: "📊",
-      label: "Dashboard",
-      description: "Visão geral dos dados",
-    },
-    {
       href: "/home",
       icon: "🏠",
       label: "Home",
@@ -22,7 +16,7 @@ const Sidebar = ({ isOpen = false, onClose }) => {
     {
       href: "/create",
       icon: "🌿",
-      label: "Cadastrar Folhas",
+      label: "Cadastrar Folha",
       description: "Adicionar nova amostra",
     },
     {
@@ -30,6 +24,12 @@ const Sidebar = ({ isOpen = false, onClose }) => {
       icon: "🗺️",
       label: "Mapa",
       description: "Visualização geográfica",
+    },
+    {
+      href: "/dashboard",
+      icon: "📊",
+      label: "Dashboard",
+      description: "Visão geral dos dados",
     },
   ];
 
