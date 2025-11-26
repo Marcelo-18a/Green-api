@@ -2,8 +2,10 @@
   "/_app": "pages/_app.js",
   "/_error": "pages/_error.js",
   "/_document": "pages/_document.js",
-  "/create": "pages/create.js",
-  "/map": "pages/map.js",
   "/home": "pages/home.js",
+  "/map": "pages/map.js",
+  "/create": "pages/create.js",
+  "/": "pages/index.js",
+  "/register": "pages/register.js",
   "/dashboard": "pages/dashboard.js"
 }

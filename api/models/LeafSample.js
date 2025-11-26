@@ -23,7 +23,7 @@ const leafSampleSchema = new mongoose.Schema({
   codigo_amostra: String, // Identificador único da amostra
   especie: { type: String, default: "Manihot esculenta" },
   variedade: String, // Ex: "IAC 90"
-  data_coleta: Date,
+  data_coleta: { type: Date, default: Date.now },
   coletado_por: String,
   imagem_original: String, // Caminho/URL da imagem enviada
   localizacao: geoSchema, // Dados geográficos da coleta

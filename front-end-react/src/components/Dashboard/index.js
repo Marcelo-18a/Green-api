@@ -2,8 +2,28 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import * as XLSX from "xlsx";
 import styles from "./Dashboard.module.css";
+import { Pie, Bar } from "react-chartjs-2";
+import {
+  Chart as ChartJS,
+  ArcElement,
+  Tooltip,
+  Legend,
+  CategoryScale,
+  LinearScale,
+  BarElement,
+} from "chart.js";
 import Loading from "../Loading";
 import { axiosConfig } from "@/utils/auth";
+import { useTheme } from "@/contexts/ThemeContext";
+
+ChartJS.register(
+  ArcElement,
+  Tooltip,
+  Legend,
+  CategoryScale,
+  LinearScale,
+  BarElement
+);
 
 const Dashboard = () => {
   // notificações removidas do Dashboard (logs em substituição)
@@ -15,11 +35,12 @@ const Dashboard = () => {
     total: 0,
     byInfectionLevel: {},
     byState: {},
-    byBacteria: {},
     avgConfidence: 0,
     avgAffectedArea: 0,
     recentSamples: 0,
   });
+
+  const { isDark } = useTheme();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -145,9 +166,6 @@ const Dashboard = () => {
         ["", ""],
         ["Distribuição por Estado", ""],
         ...Object.entries(stats.byState).map(([key, value]) => [key, value]),
-        ["", ""],
-        ["Bactérias Detectadas", ""],
-        ...Object.entries(stats.byBacteria).map(([key, value]) => [key, value]),
       ];
 
       const statsWorksheet = XLSX.utils.aoa_to_sheet(statsData);
@@ -208,7 +226,6 @@ const Dashboard = () => {
       total: samplesData.length,
       byInfectionLevel: {},
       byState: {},
-      byBacteria: {},
       avgConfidence: 0,
       avgAffectedArea: 0,
       recentSamples: 0,
@@ -231,9 +248,7 @@ const Dashboard = () => {
       const state = sample.localizacao?.estado || "Não informado";
       stats.byState[state] = (stats.byState[state] || 0) + 1;
 
-      // Bactéria
-      const bacteria = sample.analise?.bacteria_detectada || "Não detectada";
-      stats.byBacteria[bacteria] = (stats.byBacteria[bacteria] || 0) + 1;
+      // Bactéria (omitted from dashboard aggregation by request)
 
       // Confiabilidade média
       if (sample.analise?.confiabilidade_modelo) {
@@ -366,13 +381,171 @@ const Dashboard = () => {
 
       {/* Gráficos */}
       <div className={styles.chartsGrid}>
-        {renderChart(
-          stats.byInfectionLevel,
-          "Distribuição por Nível de Infecção",
-          "red"
-        )}
-        {renderChart(stats.byState, "Distribuição por Estado", "blue")}
-        {renderChart(stats.byBacteria, "Bactérias Detectadas", "purple")}
+        {/* Pie chart for infection levels: Leve (green), Moderado (orange), Grave (red) */}
+        <div className={styles.chartContainer}>
+          <h3 className={styles.chartTitle}>
+            Distribuição por Nível de Infecção
+          </h3>
+          {(() => {
+            // Normalize stats.byInfectionLevel into counts for the three stages
+            const leveKeys = ["leve", "baixo", "baixa", "minimo", "minima"];
+            const moderadoKeys = ["moderado", "moderada", "medio", "media"];
+            const graveKeys = [
+              "grave",
+              "severo",
+              "severa",
+              "alto",
+              "alta",
+              "critico",
+              "critica",
+            ];
+
+            let leveCount = 0;
+            let moderadoCount = 0;
+            let graveCount = 0;
+
+            Object.entries(stats.byInfectionLevel || {}).forEach(
+              ([key, value]) => {
+                const normalized = key
+                  .toString()
+                  .toLowerCase()
+                  .replace(/ã/g, "a")
+                  .replace(/ç/g, "c")
+                  .replace(/á|â|à/g, "a")
+                  .replace(/é|ê/g, "e")
+                  .replace(/í|î/g, "i")
+                  .replace(/ó|ô|õ/g, "o")
+                  .replace(/ú|û/g, "u")
+                  .trim();
+
+                if (leveKeys.includes(normalized)) leveCount += value;
+                else if (moderadoKeys.includes(normalized))
+                  moderadoCount += value;
+                else if (graveKeys.includes(normalized)) graveCount += value;
+                else {
+                  // if unknown, try to classify by simple heuristics
+                  if (normalized.includes("lev")) leveCount += value;
+                  else if (normalized.includes("mod")) moderadoCount += value;
+                  else if (
+                    normalized.includes("grav") ||
+                    normalized.includes("sev") ||
+                    normalized.includes("alto")
+                  )
+                    graveCount += value;
+                  else {
+                    // If still unknown, add to moderado as neutral fallback
+                    moderadoCount += value;
+                  }
+                }
+              }
+            );
+
+            const total = leveCount + moderadoCount + graveCount;
+
+            if (!total) {
+              return (
+                <div>Nenhuma amostra disponível para exibir o gráfico.</div>
+              );
+            }
+
+            const pieData = {
+              labels: ["Leve", "Moderado", "Grave"],
+              datasets: [
+                {
+                  data: [leveCount, moderadoCount, graveCount],
+                  backgroundColor: ["#2ECC71", "#F39C12", "#E74C3C"],
+                  hoverOffset: 6,
+                },
+              ],
+            };
+
+            const textColor = isDark ? "#ffffff" : "#111827";
+            const pieOptions = {
+              plugins: {
+                legend: {
+                  labels: {
+                    color: textColor,
+                  },
+                },
+                tooltip: {
+                  titleColor: textColor,
+                  bodyColor: textColor,
+                },
+              },
+            };
+
+            return <Pie data={pieData} options={pieOptions} />;
+          })()}
+        </div>
+        <div className={styles.chartContainer}>
+          <h3 className={styles.chartTitle}>Distribuição por Estado</h3>
+          {(() => {
+            const stateEntries = Object.entries(stats.byState || {});
+            if (stateEntries.length === 0) {
+              return (
+                <div>Nenhuma amostra disponível para exibir o gráfico.</div>
+              );
+            }
+
+            // Ordenar estados por contagem (maior -> menor), com fallback por nome
+            stateEntries.sort((a, b) => {
+              if (b[1] !== a[1]) return b[1] - a[1];
+              return a[0].localeCompare(b[0]);
+            });
+
+            const labels = stateEntries.map(([state]) => state);
+            const dataValues = stateEntries.map(([, value]) => value);
+
+            const palette = [
+              "#4e79a7",
+              "#f28e2b",
+              "#e15759",
+              "#76b7b2",
+              "#59a14f",
+              "#edc948",
+              "#b07aa1",
+              "#ff9da7",
+              "#9c755f",
+              "#bab0ab",
+            ];
+
+            const barData = {
+              labels,
+              datasets: [
+                {
+                  label: "Amostras",
+                  data: dataValues,
+                  backgroundColor: labels.map(
+                    (_, i) => palette[i % palette.length]
+                  ),
+                  borderColor: labels.map(
+                    (_, i) => palette[i % palette.length]
+                  ),
+                  borderWidth: 1,
+                },
+              ],
+            };
+
+            const barOptions = {
+              responsive: true,
+              maintainAspectRatio: false,
+              plugins: {
+                legend: { display: false },
+                tooltip: { mode: "index", intersect: false },
+              },
+              scales: {
+                x: { stacked: false, ticks: { color: isDark ? "#ffffff" : "#111827" } },
+                y: { beginAtZero: true, ticks: { precision: 0, color: isDark ? "#ffffff" : "#111827" } },
+              },
+            };
+
+            return (
+              <div style={{ height: 300 }}>
+                <Bar data={barData} options={barOptions} />
+              </div>
+            );
+          })()}
+        </div>
       </div>
 
       {/* Análise Avançada */}
@@ -422,12 +595,6 @@ const Dashboard = () => {
               <div className={styles.summaryItem}>
                 <strong>Estado mais afetado:</strong>{" "}
                 {Object.entries(stats.byState).sort(
-                  ([, a], [, b]) => b - a
-                )[0]?.[0] || "N/A"}
-              </div>
-              <div className={styles.summaryItem}>
-                <strong>Bactéria predominante:</strong>{" "}
-                {Object.entries(stats.byBacteria).sort(
                   ([, a], [, b]) => b - a
                 )[0]?.[0] || "N/A"}
               </div>

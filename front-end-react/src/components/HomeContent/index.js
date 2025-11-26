@@ -67,6 +67,22 @@ const HomeContent = () => {
     setSelectedSample(null);
   };
 
+  // Atualiza amostra localmente (otimista)
+  const handleOptimisticUpdate = (updatedSample) => {
+    setSamples((prev) =>
+      prev.map((s) =>
+        s._id === updatedSample._id ? { ...s, ...updatedSample } : s
+      )
+    );
+  };
+
+  // Reverte atualização local em caso de erro
+  const handleRevert = (originalSample) => {
+    setSamples((prev) =>
+      prev.map((s) => (s._id === originalSample._id ? originalSample : s))
+    );
+  };
+
   // Função para abrir o dialog de confirmação
   const openConfirmDialog = (sampleId) => {
     setConfirmDialog({
@@ -227,7 +243,12 @@ const HomeContent = () => {
 
       {/* Renderização condicional do modal de edição */}
       {selectedSample && (
-        <EditContent sample={selectedSample} onClose={closeEditModal} />
+        <EditContent
+          sample={selectedSample}
+          onClose={closeEditModal}
+          onOptimisticUpdate={handleOptimisticUpdate}
+          onRevert={handleRevert}
+        />
       )}
 
       {/* Dialog de confirmação */}

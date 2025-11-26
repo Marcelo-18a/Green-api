@@ -4,7 +4,7 @@ import axios from "axios";
 import { axiosConfig } from "@/utils/auth";
 import { useNotification } from "../Notification/NotificationContext";
 
-const EditContent = ({ onClose, sample }) => {
+const EditContent = ({ onClose, sample, onOptimisticUpdate, onRevert }) => {
   // Estados para os campos da amostra
   const [id, setId] = useState("");
   const [codigoAmostra, setCodigoAmostra] = useState("");
@@ -23,6 +23,7 @@ const EditContent = ({ onClose, sample }) => {
   const [porcentagemArea, setPorcentagemArea] = useState("");
   const [confiabilidadeModelo, setConfiabilidadeModelo] = useState("");
   const [dataAnalise, setDataAnalise] = useState("");
+  const [isSaving, setIsSaving] = useState(false);
 
   // Estados para geolocalização
   const [locationStatus, setLocationStatus] = useState("idle"); // idle, loading, success, error, denied, manual
@@ -148,6 +149,8 @@ const EditContent = ({ onClose, sample }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    setIsSaving(true);
+
     const updatedSample = {
       codigo_amostra: codigoAmostra,
       especie,
@@ -179,19 +182,70 @@ const EditContent = ({ onClose, sample }) => {
       },
     };
 
+    const originalSample = sample;
+
+    // Monta um objeto similar ao que a lista usa para apresentação
+    const updatedSampleForList = {
+      ...sample,
+      codigo_amostra: codigoAmostra,
+      especie,
+      data_coleta: dataColeta
+        ? new Date(dataColeta).toISOString()
+        : sample.data_coleta,
+      coletado_por: coletadoPor,
+      imagem_original: imagemOriginal,
+      localizacao: {
+        municipio: localizacao.municipio,
+        estado: localizacao.estado,
+        latitude: localizacao.latitude
+          ? Number(localizacao.latitude)
+          : sample.localizacao?.latitude,
+        longitude: localizacao.longitude
+          ? Number(localizacao.longitude)
+          : sample.localizacao?.longitude,
+      },
+      analise: {
+        ...sample.analise,
+        bacteria_detectada: bacteriaDetectada,
+        grau_infeccao: grauInfeccao || sample.analise?.grau_infeccao,
+        porcentagem_area_afetada:
+          porcentagemArea !== "" && porcentagemArea !== null
+            ? Number(porcentagemArea)
+            : sample.analise?.porcentagem_area_afetada,
+        confiabilidade_modelo:
+          confiabilidadeModelo !== "" && confiabilidadeModelo !== null
+            ? Number(confiabilidadeModelo)
+            : sample.analise?.confiabilidade_modelo,
+        data_analise: dataAnalise
+          ? new Date(dataAnalise).toISOString()
+          : sample.analise?.data_analise,
+      },
+    };
+
+    // Atualiza a UI imediatamente (otimista)
     try {
+      if (onOptimisticUpdate) onOptimisticUpdate(updatedSampleForList);
+
       const response = await axios.put(
         `http://localhost:4000/leafsamples/${id}`,
         updatedSample,
         axiosConfig
       );
+
       if (response.status === 200) {
         showSuccess("Amostra alterada com sucesso!");
         onClose();
+      } else {
+        // Reverter em caso de resposta inesperada
+        if (onRevert) onRevert(originalSample);
+        showError("Erro ao alterar a amostra. Tente novamente.");
       }
     } catch (error) {
       console.error(error);
+      if (onRevert) onRevert(originalSample);
       showError("Erro ao alterar a amostra. Tente novamente.");
+    } finally {
+      setIsSaving(false);
     }
   };
 
@@ -435,7 +489,12 @@ const EditContent = ({ onClose, sample }) => {
             />
           </label>
 
-          <input type="submit" value="Alterar" className="btnPrimary" />
+          <input
+            type="submit"
+            value={isSaving ? "Salvando..." : "Alterar"}
+            className="btnPrimary"
+            disabled={isSaving}
+          />
         </form>
       </div>
     </div>

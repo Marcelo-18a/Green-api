@@ -9,9 +9,13 @@ const CreateContent = () => {
   // 🔹 Estados da amostra de folha
   const [codigo_amostra, setCodigoAmostra] = useState("");
   const [especie, setEspecie] = useState("Manihot esculenta");
-  const [data_coleta, setDataColeta] = useState("");
+  const [data_coleta, setDataColeta] = useState(() => {
+    const today = new Date();
+    return today.toISOString().split("T")[0];
+  });
   const [coletado_por, setColetadoPor] = useState("");
   const [imagem_original, setImagemOriginal] = useState("");
+  const [imagemFileName, setImagemFileName] = useState("");
   const [latitude, setLatitude] = useState("");
   const [longitude, setLongitude] = useState("");
   const [municipio, setMunicipio] = useState("");
@@ -198,13 +202,43 @@ const CreateContent = () => {
 
         {/* Segunda coluna */}
         <div className={styles.formColumn}>
-          <input
-            type="text"
-            placeholder="URL da imagem original"
-            className={styles.inputCompact}
-            onChange={(e) => setImagemOriginal(e.target.value)}
-            value={imagem_original}
-          />
+          <div
+            style={{ display: "flex", flexDirection: "column", gap: "0.4rem" }}
+          >
+            <input
+              type="file"
+              accept="image/*"
+              className={styles.inputCompact}
+              onChange={(e) => {
+                const file = e.target.files && e.target.files[0];
+                if (!file) {
+                  setImagemOriginal("");
+                  setImagemFileName("");
+                  return;
+                }
+                setImagemFileName(file.name || "");
+                const reader = new FileReader();
+                reader.onload = () => {
+                  setImagemOriginal(reader.result);
+                };
+                reader.readAsDataURL(file);
+              }}
+            />
+
+            {imagemFileName && (
+              <small style={{ color: "#555" }}>{imagemFileName}</small>
+            )}
+
+            {imagem_original && (
+              <div style={{ marginTop: "0.5rem" }}>
+                <img
+                  src={imagem_original}
+                  alt="Preview da imagem"
+                  style={{ maxWidth: "100%", maxHeight: 180, borderRadius: 6 }}
+                />
+              </div>
+            )}
+          </div>
           <input
             type="text"
             placeholder="Município"
